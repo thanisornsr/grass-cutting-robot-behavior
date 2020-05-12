@@ -560,7 +560,7 @@ int32_t main(int32_t argc, char **argv) {
         od4.send(control);
         if(myTimeCounter > 4000){
           myTimeCounter = 0;
-          if(myRoomSwitch = 1){
+          if(myRoomSwitch == 1){
             myRoomSwitch = 0;
           }else{
             myRoomSwitch = 1;

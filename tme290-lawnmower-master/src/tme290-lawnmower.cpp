@@ -166,9 +166,11 @@ void decideNext(float rain, float battery){
     }else{
       if(rain >= 0.2f){
         //Raining So hard >> Stay and do nothing
-        std::cout << "Let's Raining. I'll wait..." << std::endl;
-
+        std::cout << "Let's Raining. I'll Go home..." << std::endl;
         myCommand = 0;
+        myLastPosI = myPosI;
+        myLastPosJ = myPosJ;
+        myState = stateGoBackHome;
       }else{
         //Not Raining + Good Battery >> Decide to move or to cut
         if (myJustMove == 1){
@@ -183,6 +185,7 @@ void decideNext(float rain, float battery){
       }
     }
   }
+  std::cout << "Position"<< myPosI<<","<<myPosJ<< std::endl;
 }
 
 
@@ -262,6 +265,7 @@ void stayAndCutState(float battery, float grassCentre)
       myCommand = 0;
     }
   }
+  std::cout << "Position"<< myPosI<<","<<myPosJ<< std::endl;
 }
 
 

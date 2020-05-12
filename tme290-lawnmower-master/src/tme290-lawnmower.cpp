@@ -284,7 +284,6 @@ void movingState(){
   int myDistanceToHome = myPosI + myPosJ;
   std::cout << "Position"<< myPosI<<","<<myPosJ<< std::endl;
   myBatteryToHome = (float) myDistanceToHome * myBatteryDrainRate; // This 0.02 are battery drain per one step
-  std::cout << "New Battery limit"<< myBatteryToHome  << std::endl;
   myState = stateDecideNext;
 }
 
@@ -521,6 +520,8 @@ int32_t main(int32_t argc, char **argv) {
         tme290::grass::Control control;
         control.command(myCommand);
         od4.send(control);
+        std::cout << "Battery limit"<< myBatteryToHome  << std::endl;
+        std::cout << "Battery current"<< myBattery  << std::endl;
       }};
 
 

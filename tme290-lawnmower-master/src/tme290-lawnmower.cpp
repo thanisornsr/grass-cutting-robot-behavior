@@ -383,7 +383,7 @@ void chargingState(float battery, float grassCentre){
       myPosJ = 0;
     }else{
       myCharging = 1;
-      if (grassCentre < 0){
+      if (grassCentre > 0){
         // Something happened and it's not at home properly >> Keep moving to lefttop, dying
         if (myTryToGoHome == 0){
           myCommand = 8;

@@ -71,7 +71,7 @@ void foo(){
 }
 
 void updateDirectionNext(float grassTopLeft, float grassTopCentre, float grassTopRight, float grassRight, 
-      float myGrassBottomRight, float grassBottomCentre, float grassBottomLeft, float grassLeft, float rain, float battery)
+      float GrassBottomRight, float grassBottomCentre, float grassBottomLeft, float grassLeft)
 {
   float maxGrassNear = 0.0f;
   int maxGrassDir = 0;
@@ -92,7 +92,7 @@ void updateDirectionNext(float grassTopLeft, float grassTopCentre, float grassTo
       maxGrassDir = 3;
   }
   // check 4
-  if (msg.grassRight > maxGrassNear) {
+  if (grassRight > maxGrassNear) {
       maxGrassNear = grassRight;
       maxGrassDir = 4;
   }

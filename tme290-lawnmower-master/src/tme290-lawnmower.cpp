@@ -140,6 +140,7 @@ int32_t main(int32_t argc, char **argv) {
       {
         auto msg = cluon::extractMessage<tme290::grass::Sensors>(
             std::move(envelope));
+        if (verbose) {
         myRain = msg.rain();
         myBattery = msg.battery();
         tme290::grass::Control control;
@@ -174,6 +175,7 @@ int32_t main(int32_t argc, char **argv) {
               }
             }
           }
+        }
         }
     }};
 

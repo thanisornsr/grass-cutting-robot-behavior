@@ -157,6 +157,7 @@ void decideNext(float rain, float battery){
     //Remember last point
     myLastPosI = myPosI;
     myLastPosJ = myPosJ;
+    myCommand = 0;
     myState = stateGoBackHome;
   }else{
     if (myAtLastPos == 0){

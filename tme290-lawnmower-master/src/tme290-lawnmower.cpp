@@ -452,13 +452,13 @@ int32_t main(int32_t argc, char **argv) {
     std::cout << "Mystate: " << myState << std::endl;
 
 
-    if (myState == 1){
+    /*if (myState == 1){
       //state 1
       
       od4.dataTrigger(tme290::grass::Sensors::ID(), decideNext);
     }else{
       std::cout << "To be add" << std::endl;
-    }
+    }*/
     std::cout << "Maybe Here" << std::endl;
     /*switch(myState){
       case stateDecideNext :
@@ -483,7 +483,9 @@ int32_t main(int32_t argc, char **argv) {
       default :
         std::cout << "State Unknown" << std::endl;
     }*/
-
+    tme290::grass::Control control;
+    control.command(4);
+    od4.send(control);
 
 
     while (od4.isRunning()) {

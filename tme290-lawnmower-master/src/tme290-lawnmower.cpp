@@ -73,6 +73,7 @@ void foo(){
 void updateDirectionNext(float grassTopLeft, float grassTopCentre, float grassTopRight, float grassRight, 
       float grassBottomRight, float grassBottomCentre, float grassBottomLeft, float grassLeft)
 {
+  std::cout << "I Reach Here "<< std::endl;
   float maxGrassNear = 0.0f;
   int maxGrassDir = 0;
   //next is the maximum grass direction
@@ -120,7 +121,6 @@ void updateDirectionNext(float grassTopLeft, float grassTopCentre, float grassTo
 }
 
 void decideNext(float rain, float battery){
-  std::cout << "I Reach Here "<< std::endl;
   if (battery < myBatteryToHome){
     // Low battery >> Go home
     std::cout << "Low Battery, Going Home" << std::endl;
@@ -154,6 +154,58 @@ void decideNext(float rain, float battery){
 }
 
 
+void movingState(){
+  std::cout << "Moving" << std::endl;
+  switch(myDirectionNext){
+    case 1:
+      myCommand = 1;
+      myPosI = myPosI-1;
+      myPosJ = myPosJ-1;
+      break;
+    case 2:
+      myCommand =2;
+      myPosJ = myPosJ-1;
+      break;
+    case 3:
+      myCommand = 3;
+      myPosI = myPosI+1;
+      myPosJ = myPosJ-1;
+      break;
+    case 4:
+      myCommand = 4;
+      myPosI = myPosI+1;
+      break;
+    case 5:
+      myCommand = 5;
+      myPosI = myPosI+1;
+      myPosJ = myPosJ+1;
+      break;
+    case 6:
+      myCommand = 6;
+      myPosJ = myPosJ+1;
+      break;
+    case 7:
+      myCommand = 7;
+      myPosI = myPosI-1;
+      myPosJ = myPosJ+1;
+      break;
+    case 8:
+      myCommand = 8;
+      myPosI = myPosI-1;
+      break;
+  }
+  //Done Moving and update current position
+  //Then calculate minimum battery
+  int myDistanceToHome = myPosI + myPosJ;
+  myBatteryToHome = (float) myDistanceToHome * 0.02f; // This 0.02 are battery drain per one step
+
+  myJustMove = 1;
+  myState = stateDecideNext;
+}
+
+
+
+
 int32_t main(int32_t argc, char **argv) {
   int32_t retCode{0};
   auto commandlineArguments = cluon::getCommandlineArguments(argc, argv);
@@ -172,70 +224,6 @@ int32_t main(int32_t argc, char **argv) {
     
     cluon::OD4Session od4{cid};
 
-
-    auto movingState{[&od4](cluon::data::Envelope &&envelope)
-    {
-      auto msg = cluon::extractMessage<tme290::grass::Sensors>(
-            std::move(envelope));
-      tme290::grass::Control control;
-      std::cout << "Moving" << std::endl;
-
-
-
-      switch(myDirectionNext){
-        case 1:
-          control.command(1);
-          od4.send(control);
-          myPosI = myPosI-1;
-          myPosJ = myPosJ-1;
-          break;
-        case 2:
-          control.command(2);
-          od4.send(control);
-          myPosJ = myPosJ-1;
-          break;
-        case 3:
-          control.command(3);
-          od4.send(control);
-          myPosI = myPosI+1;
-          myPosJ = myPosJ-1;
-          break;
-        case 4:
-          control.command(4);
-          od4.send(control);
-          myPosI = myPosI+1;
-          break;
-        case 5:
-          control.command(5);
-          od4.send(control);
-          myPosI = myPosI+1;
-          myPosJ = myPosJ+1;
-          break;
-        case 6:
-          control.command(6);
-          od4.send(control);
-          myPosJ = myPosJ+1;
-          break;
-        case 7:
-          control.command(7);
-          od4.send(control);
-          myPosI = myPosI-1;
-          myPosJ = myPosJ+1;
-          break;
-        case 8:
-          control.command(1);
-          od4.send(control); 
-          myPosI = myPosI-1;
-          break;
-      }
-      //Done Moving and update current position
-      //Then calculate minimum battery
-      int myDistanceToHome = myPosI + myPosJ;
-      myBatteryToHome = (float) myDistanceToHome * 0.02f; // This 0.02 are battery drain per one step
-
-      myJustMove = 1;
-      myState = stateDecideNext;
-    }};
 
     auto stayAndCutState{[&od4](cluon::data::Envelope &&envelope)
       {
@@ -436,6 +424,9 @@ int32_t main(int32_t argc, char **argv) {
           case stateDecideNext:
             decideNext(myRain, myBattery);
             break;
+          case stateMoving:
+            updateDirectionNext(myGrassTopLeft,myGrassTopCentre,myGrassTopRight,myGrassRight,myGrassBottomRight, myGrassBottomCentre, myGrassBottomLeft,myGrassLeft);
+            movingState();
           default :
             std::cout << "State Unknown" << std::endl;
         }

@@ -149,7 +149,7 @@ void updateDirectionNext(float grassTopLeft, float grassTopCentre, float grassTo
   myDirectionNext = maxGrassDir;
 }
 
-void decideNext(float rain, float battery, float grassCentre, float battery){
+void decideNext(float rain, float battery, float grassCentre){
   if (battery < myBatteryToHome){
     // Low battery >> Go home
     std::cout << "Low Battery, Going Home" << std::endl;
@@ -453,7 +453,7 @@ int32_t main(int32_t argc, char **argv) {
           switch(myState){
             case stateDecideNext:
               std::cout << "State: decideNext" << std::endl;  
-              decideNext(myRain, myBattery);
+              decideNext(myRain, myBattery,myGrassCentre);
               break;
             case stateMoving:
               std::cout << "State: Moving" << std::endl;

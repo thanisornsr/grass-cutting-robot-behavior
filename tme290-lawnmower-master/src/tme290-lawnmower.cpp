@@ -21,13 +21,13 @@
 #include "tme290-sim-grass-msg.hpp"
 
 // here is to define parameter
-int stateRobotOn;
-int stateDecideNext;
-int stateMoving;
-int stateStayAndCut;
-int stateGoBackHome;
-int stateCharging;
-int stateGoToLastPoint;
+const int stateRobotOn = 0;
+const int stateDecideNext =1;
+const int stateMoving = 2;
+const int stateStayAndCut = 3;
+const int stateGoBackHome = 4;
+const int stateCharging = 5;
+const int stateGoToLastPoint = 6;
 
 
 
@@ -48,13 +48,7 @@ int myAtLastPos;
 int myDirectionNext;
 
 void foo(){
-  stateRobotOn = 0;
-  stateDecideNext = 1;
-  stateMoving = 2;
-  stateStayAndCut = 3;
-  stateGoBackHome = 4;
-  stateCharging = 5;
-  stateGoToLastPoint = 6;
+
 
 
 
@@ -163,7 +157,7 @@ int32_t main(int32_t argc, char **argv) {
             if(myRain >= 0.2f){
               //Raining So hard >> Stay and do nothing
               std::cout << "Let's Raining. I'll wait..." << std::endl;
-              tme290::grass::Control control;
+
               control.command(0);
               od4.send(control);
             }else{
@@ -185,6 +179,8 @@ int32_t main(int32_t argc, char **argv) {
     auto movingState{[&od4](cluon::data::Envelope &&envelope)
     {
       updateDirectionNext();
+      auto msg = cluon::extractMessage<tme290::grass::Sensors>(
+            std::move(envelope));
       tme290::grass::Control control;
       std::cout << "Moving" << std::endl;
       switch(myDirectionNext){
@@ -236,7 +232,7 @@ int32_t main(int32_t argc, char **argv) {
       //Done Moving and update current position
       //Then calculate minimum battery
       int myDistanceToHome = myPosI + myPosJ;
-      myBatteryToHome = (float) myDistanceToHome * 0.02f // This 0.02 are battery drain per one step
+      myBatteryToHome = (float) myDistanceToHome * 0.02f; // This 0.02 are battery drain per one step
 
       myJustMove = 1;
       myState = stateDecideNext;
@@ -259,7 +255,7 @@ int32_t main(int32_t argc, char **argv) {
           myState = stateGoBackHome;
         }else{
           //Check center grass
-          if (msg.grassCenter() >= myTargetCut){
+          if (msg.grassCentre() >= myTargetCut){
             // Keep cutting
             std::cout << "Cutting..." << std::endl;
             control.command(0);
@@ -340,7 +336,7 @@ int32_t main(int32_t argc, char **argv) {
           myCharging = 0;
           control.command(0);
           od4.send(control);
-          myState = decideNext;
+          myState = stateDecideNext;
           std::cout << "Charge Done" << std::endl;
         }else{
           myCharging = 1;

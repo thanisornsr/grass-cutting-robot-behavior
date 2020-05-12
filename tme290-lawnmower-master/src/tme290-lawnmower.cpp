@@ -268,7 +268,7 @@ void goingHomeState()
 {
   if (myPosI == 0 and myPosJ == 0){
     //Reach Home Move to Charging
-    myCommand = 0;
+    myCommand = 8;
     myState = stateCharging;
     myGoingHome = 0;
     std::cout << "I'm Home" << std::endl;

@@ -29,9 +29,7 @@ const int stateGoBackHome = 4;
 const int stateCharging = 5;
 const int stateGoToLastPoint = 6;
 
-void updateDirectionNext(float grassTopLeft, float grassTopCentre, float grassTopRight, float grassRight, 
-      float myGrassBottomRight, float grassBottomCentre, float grassBottomLeft, float grassLeft, float rain, float battery);
-void decideNext(float rain, float battery);
+
 float myGrass;
 float myRain;
 float myBattery;
@@ -56,11 +54,7 @@ float myGrassBottomRight;
 float myGrassBottomCentre;
 float myGrassBottomLeft;
 float myGrassLeft;
-
 void foo(){
-
-
-
   myCommand = 0;
   myState = stateRobotOn;
   myBatteryToHome = 0.2f;
@@ -72,6 +66,89 @@ void foo(){
   myAtLastPos = 0;
   myTargetCut = 0.3f;
   myState = stateDecideNext;
+}
+
+void updateDirectionNext(float grassTopLeft, float grassTopCentre, float grassTopRight, float grassRight, 
+      float myGrassBottomRight, float grassBottomCentre, float grassBottomLeft, float grassLeft, float rain, float battery)
+{
+  float maxGrassNear = 0.0f;
+  int maxGrassDir = 0;
+  //next is the maximum grass direction
+  // check 1
+  if (grassTopLeft > maxGrassNear) {
+      maxGrassNear = grassTopLeft;
+      maxGrassDir = 1;
+  }
+  // check 2
+  if (grassTopCentre > maxGrassNear) {
+      maxGrassNear = grassTopCentre;
+      maxGrassDir = 2;
+  }
+  // check 3
+  if (grassTopRight >= maxGrassNear) {
+      maxGrassNear = grassTopRight;
+      maxGrassDir = 3;
+  }
+  // check 4
+  if (msg.grassRight > maxGrassNear) {
+      maxGrassNear = grassRight;
+      maxGrassDir = 4;
+  }
+  // check 5
+  if (grassBottomRight > maxGrassNear) {
+      maxGrassNear = grassBottomRight;
+      maxGrassDir = 5;
+  }
+  // check 6
+  if (grassBottomCentre > maxGrassNear) {
+      maxGrassNear = grassBottomCentre;
+      maxGrassDir = 6;
+  }
+  // check 7
+  if (grassBottomLeft > maxGrassNear) {
+      maxGrassNear = grassBottomLeft;
+      maxGrassDir = 7;
+  }
+  // check 8
+  if (grassLeft > maxGrassNear) {
+      maxGrassNear = grassLeft;
+      maxGrassDir = 8;
+  }
+  myDirectionNext = maxGrassDir;
+}
+
+void decideNext(float rain, float battery){
+  std::cout << "I Reach Here "<< std::endl;
+  if (myBattery < myBatteryToHome){
+    // Low battery >> Go home
+    std::cout << "Low Battery, Going Home" << std::endl;
+    //Remember last point
+    myLastPosI = myPosI;
+    myLastPosJ = myPosJ;
+    myState = stateGoBackHome;
+  }else{
+    if (myAtLastPos == 1){
+      //Going to last pos
+      myState = stateGoToLastPoint;
+    }else{
+      if(myRain >= 0.2f){
+        //Raining So hard >> Stay and do nothing
+        std::cout << "Let's Raining. I'll wait..." << std::endl;
+
+        myCommand = 0;
+      }else{
+        //Not Raining + Good Battery >> Decide to move or to cut
+        if (myJustMove == 1){
+          //It is time to cut!!
+          myJustMove = 0;
+          myState = stateStayAndCut;
+        }else{
+          //Let make some move!!
+          myState = stateMoving;
+        }
+      }
+    }
+  }
 }
 
 
@@ -92,93 +169,6 @@ int32_t main(int32_t argc, char **argv) {
     uint16_t const cid = std::stoi(commandlineArguments["cid"]);
     
     cluon::OD4Session od4{cid};
-    // Functions
-
-
-    void updateDirectionNext(float grassTopLeft, float grassTopCentre, float grassTopRight, float grassRight, 
-      float myGrassBottomRight, float grassBottomCentre, float grassBottomLeft, float grassLeft, float rain, float battery)
-      {
-      float maxGrassNear = 0.0f;
-      int maxGrassDir = 0;
-      //next is the maximum grass direction
-      // check 1
-      if (msg.grassTopLeft() > maxGrassNear) {
-          maxGrassNear = msg.grassTopLeft();
-          maxGrassDir = 1;
-      }
-      // check 2
-      if (msg.grassTopCentre() > maxGrassNear) {
-          maxGrassNear = msg.grassTopCentre();
-          maxGrassDir = 2;
-      }
-      // check 3
-      if (msg.grassTopRight() >= maxGrassNear) {
-          maxGrassNear = msg.grassTopRight();
-          maxGrassDir = 3;
-      }
-      // check 4
-      if (msg.grassRight() > maxGrassNear) {
-          maxGrassNear = msg.grassRight();
-          maxGrassDir = 4;
-      }
-      // check 5
-      if (msg.grassBottomRight() > maxGrassNear) {
-          maxGrassNear = msg.grassBottomRight();
-          maxGrassDir = 5;
-      }
-      // check 6
-      if (msg.grassBottomCentre() > maxGrassNear) {
-          maxGrassNear = msg.grassBottomCentre();
-          maxGrassDir = 6;
-      }
-      // check 7
-      if (msg.grassBottomLeft() > maxGrassNear) {
-          maxGrassNear = msg.grassBottomLeft();
-          maxGrassDir = 7;
-      }
-      // check 8
-      if (msg.grassLeft() > maxGrassNear) {
-          maxGrassNear = msg.grassLeft();
-          maxGrassDir = 8;
-      }
-      myDirectionNext = maxGrassDir;
-    }
-
-   
-    void decideNext(float rain, float battery)
-      {
-        std::cout << "I Reach Here "<< std::endl;
-        if (myBattery < myBatteryToHome){
-          // Low battery >> Go home
-          std::cout << "Low Battery, Going Home" << std::endl;
-          //Remember last point
-          myLastPosI = myPosI;
-          myLastPosJ = myPosJ;
-          myState = stateGoBackHome;
-        }else{
-          if (myAtLastPos == 1){
-            //Going to last pos
-            myState = stateGoToLastPoint;
-          }else{
-            if(myRain >= 0.2f){
-              //Raining So hard >> Stay and do nothing
-              std::cout << "Let's Raining. I'll wait..." << std::endl;
-
-              myCommand = 0;
-            }else{
-              //Not Raining + Good Battery >> Decide to move or to cut
-              if (myJustMove == 1){
-                //It is time to cut!!
-                myJustMove = 0;
-                myState = stateStayAndCut;
-              }else{
-                //Let make some move!!
-                myState = stateMoving;
-              }
-            }
-          }
-        }
-    }
 
 
     auto movingState{[&od4](cluon::data::Envelope &&envelope)

@@ -199,6 +199,7 @@ void decideNext(float rain, float battery, float grassCentre){
           myState = stateStayAndCut;
         }else{
           //Let make some move!!
+          myCommand = 0;
           myState = stateMoving;
         }
       }

@@ -449,6 +449,7 @@ int32_t main(int32_t argc, char **argv) {
     std::cout << "Mystate: " << myState << std::endl;
     switch(myState){
       case stateDecideNext :
+        std::cout << "I Reach Here: "<< std::endl;
         od4.dataTrigger(tme290::grass::Sensors::ID(), decideNext);
         break;
       case stateMoving :

@@ -44,6 +44,8 @@ int myLastPosI;
 int myLastPosJ;
 int myPosI;
 int myPosJ;
+int myRoomSwitch;
+int myTimeCounter;
 
 //These parameter are to tune
 float myBatteryDrainRate;
@@ -88,6 +90,9 @@ void foo(){
   rainCounter = 0;
   myTryToGoHome = 0;
   myState = stateDecideNext;
+  myRoomSwitch = 0;
+  myTimeCounter = 0;
+
 
 
   //Parameter to Tune
@@ -533,9 +538,15 @@ int32_t main(int32_t argc, char **argv) {
               //Original Plan: Go to last poistion
               //goingToLastPointState();
               //Test Go to nearest
-              myAtLastPos = 1;
-              updateDirectionNext(myGrassTopLeft,myGrassTopCentre,myGrassTopRight,myGrassRight,myGrassBottomRight, myGrassBottomCentre, myGrassBottomLeft,myGrassLeft);
-              movingState();
+
+              if (myRoomSwitch == 1){
+                goingToLastPointState();
+              }else{
+                myAtLastPos = 1;
+                updateDirectionNext(myGrassTopLeft,myGrassTopCentre,myGrassTopRight,myGrassRight,myGrassBottomRight, myGrassBottomCentre, myGrassBottomLeft,myGrassLeft);
+                movingState();
+              }
+              
 
               break;
             default :
@@ -547,6 +558,16 @@ int32_t main(int32_t argc, char **argv) {
         tme290::grass::Control control;
         control.command(myCommand);
         od4.send(control);
+        if(myTimeCounter > 4000){
+          myTimeCounter = 0;
+          if(myRoomSwitch = 1){
+            myRoomSwitch = 0;
+          }else{
+            myRoomSwitch = 1;
+          }
+
+        }
+        myTimeCounter
         std::cout << "Grass sensor centre"<< myGrassCentre  << std::endl;
         std::cout << "Battery limit"<< myBatteryToHome  << std::endl;
         std::cout << "Battery current"<< myBattery  << std::endl;

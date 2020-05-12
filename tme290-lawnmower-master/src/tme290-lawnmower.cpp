@@ -29,9 +29,9 @@ const int stateGoBackHome = 4;
 const int stateCharging = 5;
 const int stateGoToLastPoint = 6;
 
-
-
-int32_t myState;
+void updateDirectionNext(float grassTopLeft, float grassTopCentre, float grassTopRight, float grassRight, 
+      float myGrassBottomRight, float grassBottomCentre, float grassBottomLeft, float grassLeft, float rain, float battery);
+void decideNext(float rain, float battery);
 float myGrass;
 float myRain;
 float myBattery;
@@ -46,6 +46,7 @@ int myLastPosI;
 int myLastPosJ;
 int myAtLastPos;
 int myDirectionNext;
+int myCommand;
 
 float myGrassTopLeft;
 float myGrassTopCentre;
@@ -60,7 +61,7 @@ void foo(){
 
 
 
-
+  myCommand = 0;
   myState = stateRobotOn;
   myBatteryToHome = 0.2f;
   myJustMove = 0;
@@ -92,10 +93,11 @@ int32_t main(int32_t argc, char **argv) {
     
     cluon::OD4Session od4{cid};
     // Functions
-    auto updateDirectionNext{[&od4](cluon::data::Envelope &&envelope)
+
+
+    void updateDirectionNext(float grassTopLeft, float grassTopCentre, float grassTopRight, float grassRight, 
+      float myGrassBottomRight, float grassBottomCentre, float grassBottomLeft, float grassLeft, float rain, float battery)
       {
-      auto msg = cluon::extractMessage<tme290::grass::Sensors>(
-          std::move(envelope));
       float maxGrassNear = 0.0f;
       int maxGrassDir = 0;
       //next is the maximum grass direction
@@ -140,19 +142,11 @@ int32_t main(int32_t argc, char **argv) {
           maxGrassDir = 8;
       }
       myDirectionNext = maxGrassDir;
+    }
 
-
-    }};
-
-
-    auto decideNext{[&od4](cluon::data::Envelope &&envelope)
+   
+    void decideNext(float rain, float battery)
       {
-        auto msg = cluon::extractMessage<tme290::grass::Sensors>(
-            std::move(envelope));
-        
-        myRain = msg.rain();
-        myBattery = msg.battery();
-        tme290::grass::Control control;
         std::cout << "I Reach Here "<< std::endl;
         if (myBattery < myBatteryToHome){
           // Low battery >> Go home
@@ -170,8 +164,7 @@ int32_t main(int32_t argc, char **argv) {
               //Raining So hard >> Stay and do nothing
               std::cout << "Let's Raining. I'll wait..." << std::endl;
 
-              control.command(0);
-              od4.send(control);
+              myCommand = 0;
             }else{
               //Not Raining + Good Battery >> Decide to move or to cut
               if (myJustMove == 1){
@@ -185,8 +178,7 @@ int32_t main(int32_t argc, char **argv) {
             }
           }
         }
-        
-    }};
+    }
 
 
     auto movingState{[&od4](cluon::data::Envelope &&envelope)
@@ -195,6 +187,9 @@ int32_t main(int32_t argc, char **argv) {
             std::move(envelope));
       tme290::grass::Control control;
       std::cout << "Moving" << std::endl;
+
+
+
       switch(myDirectionNext){
         case 1:
           control.command(1);
@@ -442,13 +437,21 @@ int32_t main(int32_t argc, char **argv) {
         myGrassBottomCentre = msg.grassBottomCentre();
         myGrassBottomLeft = msg.grassBottomLeft();
         myGrassLeft = msg.grassLeft();
-        std::cout << myGrassTopLeft << std::endl;
+        myRain = msg.rain();
+        myBattery = msg.battery();
+        
+        if(myState == 1){
+          decideNext(myRain, myBattery);
+
+        }else{
+          std::cout << "Not state 1: " << myState << std::endl;
+        }
+
+
+
         tme290::grass::Control control;
-        control.command(4);
+        control.command(myCommand);
         od4.send(control);
-
-
-
       }};
 
 

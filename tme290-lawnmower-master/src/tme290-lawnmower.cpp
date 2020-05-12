@@ -540,6 +540,7 @@ int32_t main(int32_t argc, char **argv) {
               //Test Go to nearest
 
               if (myRoomSwitch == 1){
+
                 goingToLastPointState();
               }else{
                 myAtLastPos = 1;
@@ -567,7 +568,7 @@ int32_t main(int32_t argc, char **argv) {
           }
 
         }
-        
+        myTimeCounter = myTimeCounter + 1;
         std::cout << "Grass sensor centre"<< myGrassCentre  << std::endl;
         std::cout << "Battery limit"<< myBatteryToHome  << std::endl;
         std::cout << "Battery current"<< myBattery  << std::endl;

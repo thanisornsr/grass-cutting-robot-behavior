@@ -29,14 +29,6 @@ const int stateGoBackHome = 4;
 const int stateCharging = 5;
 const int stateGoToLastPoint = 6;
 
-
-
-
-
-
-
-
-
 int myDirectionNext;
 
 //This is for robot's status
@@ -44,6 +36,7 @@ int myJustMove;
 int myGoingHome;
 int myCharging;
 int myAtLastPos;
+int rainCounter;
 
 //This is for positioning
 int myLastPosI;
@@ -56,6 +49,7 @@ float myBatteryDrainRate;
 float myMaximumCharge;
 float myTargetCut;
 float myBatteryToHome; // This will be auto-tune depend on Bettery DrainRate;
+int rainMaxStep;
 
 //These parameter to store sensor value
 float myGrassTopLeft;
@@ -88,7 +82,7 @@ void foo(){
   myPosI = 0;
   myPosJ = 0;
   myAtLastPos = 1;
-  
+  rainCounter = 0;
   myState = stateDecideNext;
 
 
@@ -99,6 +93,8 @@ void foo(){
   myBatteryDrainRate = 0.01f;
   // Cutting Target
   myTargetCut = 0.3f;
+  // Max step of rainning before go home
+  rainMaxStep = 10;
 }
 
 void updateDirectionNext(float grassTopLeft, float grassTopCentre, float grassTopRight, float grassRight, 
@@ -167,11 +163,19 @@ void decideNext(float rain, float battery){
     }else{
       if(rain >= 0.2f){
         //Raining So hard >> Stay and do nothing
-        std::cout << "Let's Raining. I'll Go home..." << std::endl;
-        myCommand = 0;
-        myLastPosI = myPosI;
-        myLastPosJ = myPosJ;
-        myState = stateGoBackHome;
+        std::cout << "Let's Raining. I'll Wait..." << std::endl;
+        if (rainCounter <= rainMaxStep){
+          rainCounter = rainCounter + 1;
+          myCommand = 0;
+        }else{
+          std::cout << "Let's Raining. I'll Go home..." << std::endl;
+          rainCounter = 0;
+          myCommand = 0;
+          myLastPosI = myPosI;
+          myLastPosJ = myPosJ;
+          myState = stateGoBackHome;
+        }
+        
       }else{
         //Not Raining + Good Battery >> Decide to move or to cut
         if (myJustMove == 1){

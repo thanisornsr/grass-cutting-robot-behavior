@@ -149,7 +149,7 @@ void updateDirectionNext(float grassTopLeft, float grassTopCentre, float grassTo
   myDirectionNext = maxGrassDir;
 }
 
-void decideNext(float rain, float battery, float grassCentre){
+void decideNext(float rain, float battery, float grassCentre, float battery){
   if (battery < myBatteryToHome){
     // Low battery >> Go home
     std::cout << "Low Battery, Going Home" << std::endl;
@@ -168,8 +168,17 @@ void decideNext(float rain, float battery, float grassCentre){
         //Raining So hard >> Stay and do nothing
         std::cout << "Let's Raining. I'll Wait..." << std::endl;
         if (rainCounter <= rainMaxStep){
-          rainCounter = rainCounter + 1;
-          myCommand = 0;
+          if (battery < myBatteryToHome){
+            std::cout << "Let's Raining. I'll Go home..." << std::endl;
+            rainCounter = 0;
+            myCommand = 0;
+            myLastPosI = myPosI;
+            myLastPosJ = myPosJ;
+            myState = stateGoBackHome;
+          }else{
+            rainCounter = rainCounter + 1;
+            myCommand = 0;
+          }
         }else{
           std::cout << "Let's Raining. I'll Go home..." << std::endl;
           rainCounter = 0;

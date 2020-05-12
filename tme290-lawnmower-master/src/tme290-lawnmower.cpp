@@ -567,7 +567,7 @@ int32_t main(int32_t argc, char **argv) {
           }
 
         }
-        myTimeCounter
+        
         std::cout << "Grass sensor centre"<< myGrassCentre  << std::endl;
         std::cout << "Battery limit"<< myBatteryToHome  << std::endl;
         std::cout << "Battery current"<< myBattery  << std::endl;

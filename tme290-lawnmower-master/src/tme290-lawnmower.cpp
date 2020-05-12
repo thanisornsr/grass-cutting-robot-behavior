@@ -30,22 +30,34 @@ const int stateCharging = 5;
 const int stateGoToLastPoint = 6;
 
 
-float myGrass;
-float myRain;
-float myBattery;
-int myPosI;
-int myPosJ;
-float myTargetCut;
+
+
+
+
+
+
+
+int myDirectionNext;
+
+//This is for robot's status
 int myJustMove;
 int myGoingHome;
 int myCharging;
-float myBatteryToHome;
+int myAtLastPos;
+
+//This is for positioning
 int myLastPosI;
 int myLastPosJ;
-int myAtLastPos;
-int myDirectionNext;
-int myCommand;
+int myPosI;
+int myPosJ;
 
+//These parameter are to tune
+float myBatteryDrainRate;
+float myMaximumCharge;
+float myTargetCut;
+float myBatteryToHome; // This will be auto-tune depend on Bettery DrainRate;
+
+//These parameter to store sensor value
 float myGrassTopLeft;
 float myGrassTopCentre;
 float myGrassTopRight;
@@ -55,9 +67,18 @@ float myGrassBottomCentre;
 float myGrassBottomLeft;
 float myGrassLeft;
 float myGrassCentre;
+float myGrass;
+float myRain;
+float myBattery;
+
+//Define state
 int myState;
+//For sending Command
+int myCommand;
+
 
 void foo(){
+  //Parameter
   myCommand = 0;
   myState = stateRobotOn;
   myBatteryToHome = 0.2f;
@@ -67,8 +88,17 @@ void foo(){
   myPosI = 0;
   myPosJ = 0;
   myAtLastPos = 0;
-  myTargetCut = 0.3f;
+  
   myState = stateDecideNext;
+
+
+  //Parameter to Tune
+  // Maximum charge
+  myMaximumCharge = 0.98f;
+  // Battery drain per step
+  myBatteryDrainRate = 0.02f;
+  // Cutting Target
+  myTargetCut = 0.3f;
 }
 
 void updateDirectionNext(float grassTopLeft, float grassTopCentre, float grassTopRight, float grassRight, 
@@ -201,7 +231,7 @@ void movingState(){
   //Done Moving and update current position
   //Then calculate minimum battery
   int myDistanceToHome = myPosI + myPosJ;
-  myBatteryToHome = (float) myDistanceToHome * 0.02f; // This 0.02 are battery drain per one step
+  myBatteryToHome = (float) myDistanceToHome * myBatteryDrainRate; // This 0.02 are battery drain per one step
 
   myJustMove = 1;
   myState = stateDecideNext;
@@ -282,7 +312,7 @@ void goingHomeState()
 
 void chargingState(float battery){
     //Keep stay and checking bettery
-    if (battery >= 0.98f){
+    if (battery >= myMaximumCharge){
       myCharging = 0;
       myCommand = 0;
       myState = stateDecideNext;
@@ -301,7 +331,6 @@ auto goingToLastPointState(){
       //reach last point
       myAtLastPos = 0;
       myCommand = 0;
-      od4.send(control);
       std::cout << "Reach Last point" << std::endl;
     }else{
       myAtLastPos = 1;
@@ -446,16 +475,6 @@ int32_t main(int32_t argc, char **argv) {
     tme290::grass::Control control;
     control.command(0);
     od4.send(control);
-    /*
-
-      case stateGoToLastPoint:
-        od4.dataTrigger(tme290::grass::Sensors::ID(), goingToLastPointState);
-        break;
-      default :
-        std::cout << "State Unknown" << std::endl;
-    }*/
-    
-
 
     while (od4.isRunning()) {
       std::this_thread::sleep_for(std::chrono::milliseconds(1000));

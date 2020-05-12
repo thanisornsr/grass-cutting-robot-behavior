@@ -427,6 +427,7 @@ int32_t main(int32_t argc, char **argv) {
           case stateMoving:
             updateDirectionNext(myGrassTopLeft,myGrassTopCentre,myGrassTopRight,myGrassRight,myGrassBottomRight, myGrassBottomCentre, myGrassBottomLeft,myGrassLeft);
             movingState();
+            break;
           default :
             std::cout << "State Unknown" << std::endl;
         }

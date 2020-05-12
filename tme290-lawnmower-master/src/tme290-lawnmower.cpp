@@ -417,17 +417,13 @@ int32_t main(int32_t argc, char **argv) {
           }
         }
 
-
-        //Keepmoving to last point
-        //send command to move 
-        //update current pos
       }};
 
-    auto onSensors{[&od4](cluon::data::Envelope &&envelope)
+    /*auto onSensors{[&od4](cluon::data::Envelope &&envelope)
       {
         auto msg = cluon::extractMessage<tme290::grass::Sensors>(
             std::move(envelope));
-      }};
+      }};*/
 
 
 
@@ -441,7 +437,7 @@ int32_t main(int32_t argc, char **argv) {
             << msg.grassMean() << "/" << msg.grassMax() << std::endl;
         }
       }};
-    od4.dataTrigger(tme290::grass::Sensors::ID(), onSensors);
+    //od4.dataTrigger(tme290::grass::Sensors::ID(), onSensors);
     od4.dataTrigger(tme290::grass::Status::ID(), onStatus);
 
     if (verbose) {

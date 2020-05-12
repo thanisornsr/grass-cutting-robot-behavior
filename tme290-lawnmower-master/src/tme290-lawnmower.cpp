@@ -395,6 +395,7 @@ void chargingState(float battery, float grassCentre){
 
 
       }else{
+        // Home properly
         myCommand = 0;
       }
 

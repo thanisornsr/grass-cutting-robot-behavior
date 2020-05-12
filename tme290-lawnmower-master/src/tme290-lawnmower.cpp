@@ -38,6 +38,7 @@ int myCharging;
 int myAtLastPos;
 int rainCounter;
 int myTryToGoHome;
+float myBatteryOld;
 
 //This is for positioning
 int myLastPosI;
@@ -92,6 +93,7 @@ void foo(){
   myState = stateDecideNext;
   myRoomSwitch = 0;
   myTimeCounter = 0;
+  myBatteryOld = 0.0f;
 
 
 
@@ -388,7 +390,7 @@ void chargingState(float battery, float grassTopCentre, float grassLeft){
       myPosJ = 0;
     }else{
       myCharging = 1;
-      if (grassTopCentre >= 0.006f && grassLeft >= 0.006f){
+      if (myBatteryOld > battery){
         // Something happened and it's not at home properly >> Keep moving to lefttop, dying
         if (myTryToGoHome == 0){
           std::cout << "Not Home yet: Move left" << std::endl;
@@ -410,10 +412,12 @@ void chargingState(float battery, float grassTopCentre, float grassLeft){
       }else{
         // Home properly
         myCommand = 0;
+        std::cout << "Charging" << std::endl;
+        myBatteryOld = battery;
       }
 
       
-      std::cout << "Charging" << std::endl;
+      
     }
 }
 

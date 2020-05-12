@@ -78,7 +78,7 @@ void foo(){
   //Parameter
   myCommand = 0;
   myState = stateRobotOn;
-  myBatteryToHome = 0.2f;
+  myBatteryToHome = 0.001f;
   myJustMove = 0;
   myGoingHome = 0;
   myCharging = 0;
@@ -95,7 +95,7 @@ void foo(){
   myMaximumCharge = 0.98f;
   // Battery drain per step
   //myBatteryDrainRate = 0.01f;
-  myBatteryDrainRate = 0.05f;
+  myBatteryDrainRate = 0.009f;
   // Cutting Target
   myTargetCut = 0.2f;
   // Max step of rainning before go home
@@ -372,7 +372,7 @@ void goingHomeState()
 }
 
 
-void chargingState(float battery){
+void chargingState(float battery, float grassCentre){
     //Keep stay and checking bettery
     if (battery >= myMaximumCharge){
       myCharging = 0;
@@ -383,15 +383,22 @@ void chargingState(float battery){
       myPosJ = 0;
     }else{
       myCharging = 1;
-      //myCommand = 0;
-      //in case some weird thing happend>> Keep moving to lefttop, dying
-      if (myTryToGoHome == 0){
-        myCommand = 8;
-        myTryToGoHome = 1;
+      if (grassCentre < 0){
+        // Something happened and it's not at home properly >> Keep moving to lefttop, dying
+        if (myTryToGoHome == 0){
+          myCommand = 8;
+          myTryToGoHome = 1;
+        }else{
+          myCommand = 2;
+          myTryToGoHome = 0;
+        }
+
+
       }else{
-        myCommand = 2;
-        myTryToGoHome = 0;
+        myCommand = 0;
       }
+
+      
       std::cout << "Charging" << std::endl;
     }
 }
@@ -515,7 +522,7 @@ int32_t main(int32_t argc, char **argv) {
               break;
             case stateCharging:
               std::cout << "State: Charging" << std::endl;
-              chargingState(myBattery);
+              chargingState(myBattery,myGrassCentre);
               break;
             case stateGoToLastPoint:
               std::cout << "State: stateGoToLastPoint" << std::endl;

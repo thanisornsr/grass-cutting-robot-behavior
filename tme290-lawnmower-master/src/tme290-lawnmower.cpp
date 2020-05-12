@@ -78,7 +78,7 @@ void foo(){
   //Parameter
   myCommand = 0;
   myState = stateRobotOn;
-  myBatteryToHome = 0.001f;
+  myBatteryToHome = 0.2f;
   myJustMove = 0;
   myGoingHome = 0;
   myCharging = 0;
@@ -95,7 +95,7 @@ void foo(){
   myMaximumCharge = 0.98f;
   // Battery drain per step
   //myBatteryDrainRate = 0.01f;
-  myBatteryDrainRate = 0.009f;
+  myBatteryDrainRate = 0.0001f;
   // Cutting Target
   myTargetCut = 0.2f;
   // Max step of rainning before go home

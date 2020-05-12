@@ -92,7 +92,7 @@ void foo(){
   // Maximum charge
   myMaximumCharge = 0.98f;
   // Battery drain per step
-  myBatteryDrainRate = 0.014f;
+  myBatteryDrainRate = 0.011f;
   // Cutting Target
   myTargetCut = 0.2f;
   // Max step of rainning before go home
@@ -100,7 +100,7 @@ void foo(){
   // Allow passing cutting this step and continue moving
   myAllowPass = 0.7f;
   // If neighbour grass status is above this threshold >> Room 1 go bottom left >> Room 2 go bottom right
-  myDirectionThreshold = 0.2f;
+  myDirectionThreshold = 0.1f;
 }
 
 void updateDirectionNext(float grassTopLeft, float grassTopCentre, float grassTopRight, float grassRight, 

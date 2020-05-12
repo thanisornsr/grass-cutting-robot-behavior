@@ -47,6 +47,15 @@ int myLastPosJ;
 int myAtLastPos;
 int myDirectionNext;
 
+float myGrassTopLeft;
+float myGrassTopCentre;
+float myGrassTopRight;
+float myGrassRight;
+float myGrassBottomRight;
+float myGrassBottomCentre;
+float myGrassBottomLeft;
+float myGrassLeft;
+
 void foo(){
 
 
@@ -425,10 +434,15 @@ int32_t main(int32_t argc, char **argv) {
       {
         auto msg = cluon::extractMessage<tme290::grass::Sensors>(
             std::move(envelope));
-        std::cout << msg.grassRight() << std::endl;
-        tme290::grass::Control control;
-        control.command(0);
-        od4.send(control);
+        myGrassTopLeft = msg.grassTopLeft();
+        myGrassTopCentre = msg.grassTopCentre();
+        myGrassTopRight = msg.grassTopRight();
+        myGrassRight = msg.grassRight();
+        myGrassBottomRight = msg.grassBottomRight();
+        myGrassBottomCentre = msg.grassBottomCentre();
+        myGrassBottomLeft = msg.grassBottomLeft();
+        myGrassLeft = msg.grassLeft();
+        std::cout << myGrassTopLeft << std::endl;
       }};
 
 

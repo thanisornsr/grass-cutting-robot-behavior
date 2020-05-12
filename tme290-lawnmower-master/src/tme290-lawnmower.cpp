@@ -22,7 +22,7 @@
 
 // here is to define parameter
 int32_t myState = 0;
-std::cout << myState << std::endl;
+cout << myState;
 float myGrass;
 float myRain;
 float myBattery;
@@ -34,8 +34,8 @@ int myJustMove = 0;
 int myGoingHome = 0;
 int myCharging = 0;
 myState = 1;
-std::cout << "HELLO" << std::endl;
-std::cout << myState << std::endl;
+cout << "HELLO";
+cout << myState;
 int32_t main(int32_t argc, char **argv) {
   int32_t retCode{0};
   auto commandlineArguments = cluon::getCommandlineArguments(argc, argv);

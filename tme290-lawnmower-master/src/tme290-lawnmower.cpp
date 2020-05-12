@@ -96,7 +96,7 @@ void foo(){
   // Maximum charge
   myMaximumCharge = 0.98f;
   // Battery drain per step
-  myBatteryDrainRate = 0.03f;
+  myBatteryDrainRate = 0.01f;
   // Cutting Target
   myTargetCut = 0.3f;
 }

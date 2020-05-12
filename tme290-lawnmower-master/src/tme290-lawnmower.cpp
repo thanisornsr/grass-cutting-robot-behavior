@@ -48,6 +48,7 @@ int myPosJ;
 float myBatteryDrainRate;
 float myMaximumCharge;
 float myTargetCut;
+float myAllowPass;
 float myBatteryToHome; // This will be auto-tune depend on Bettery DrainRate;
 int rainMaxStep;
 
@@ -90,11 +91,13 @@ void foo(){
   // Maximum charge
   myMaximumCharge = 0.98f;
   // Battery drain per step
-  myBatteryDrainRate = 0.01f;
+  myBatteryDrainRate = 0.005f;
   // Cutting Target
   myTargetCut = 0.3f;
   // Max step of rainning before go home
   rainMaxStep = 60;
+  // Allow passing cutting this step and continue moving
+  myAllowPass = 0.4f;
 }
 
 void updateDirectionNext(float grassTopLeft, float grassTopCentre, float grassTopRight, float grassRight, 
@@ -146,7 +149,7 @@ void updateDirectionNext(float grassTopLeft, float grassTopCentre, float grassTo
   myDirectionNext = maxGrassDir;
 }
 
-void decideNext(float rain, float battery){
+void decideNext(float rain, float battery, float grassCentre){
   if (battery < myBatteryToHome){
     // Low battery >> Go home
     std::cout << "Low Battery, Going Home" << std::endl;
@@ -178,7 +181,7 @@ void decideNext(float rain, float battery){
         
       }else{
         //Not Raining + Good Battery >> Decide to move or to cut
-        if (myJustMove == 1){
+        if (myJustMove == 1 && grassCentre > myAllowPass){
           //It is time to cut!!
           myJustMove = 0;
           myCommand = 0;

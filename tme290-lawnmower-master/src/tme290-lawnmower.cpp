@@ -97,7 +97,7 @@ void foo(){
   // Max step of rainning before go home
   rainMaxStep = 60;
   // Allow passing cutting this step and continue moving
-  myAllowPass = 0.4f;
+  myAllowPass = 0.7f;
 }
 
 void updateDirectionNext(float grassTopLeft, float grassTopCentre, float grassTopRight, float grassRight, 

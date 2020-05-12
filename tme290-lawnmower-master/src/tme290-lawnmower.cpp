@@ -437,7 +437,6 @@ int32_t main(int32_t argc, char **argv) {
             decideNext(myRain, myBattery);
             break;
           default :
-            default :
             std::cout << "State Unknown" << std::endl;
         }
         tme290::grass::Control control;

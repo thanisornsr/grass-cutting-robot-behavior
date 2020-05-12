@@ -54,6 +54,8 @@ float myGrassBottomRight;
 float myGrassBottomCentre;
 float myGrassBottomLeft;
 float myGrassLeft;
+int myState;
+
 void foo(){
   myCommand = 0;
   myState = stateRobotOn;

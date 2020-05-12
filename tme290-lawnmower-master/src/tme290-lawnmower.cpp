@@ -94,7 +94,7 @@ void foo(){
   // Cutting Target
   myTargetCut = 0.3f;
   // Max step of rainning before go home
-  rainMaxStep = 10;
+  rainMaxStep = 60;
 }
 
 void updateDirectionNext(float grassTopLeft, float grassTopCentre, float grassTopRight, float grassRight, 

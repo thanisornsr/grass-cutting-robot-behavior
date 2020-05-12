@@ -100,7 +100,7 @@ void foo(){
   myMaximumCharge = 0.98f;
   // Battery drain per step
   //myBatteryDrainRate = 0.01f;
-  myBatteryDrainRate = 0.01f;
+  myBatteryDrainRate = 0.011f;
   // Cutting Target
   myTargetCut = 0.2f;
   // Max step of rainning before go home
@@ -559,7 +559,7 @@ int32_t main(int32_t argc, char **argv) {
         tme290::grass::Control control;
         control.command(myCommand);
         od4.send(control);
-        if(myTimeCounter > 12000){
+        if(myTimeCounter > 10000){
           myTimeCounter = 0;
           if(myRoomSwitch == 1){
             myRoomSwitch = 0;

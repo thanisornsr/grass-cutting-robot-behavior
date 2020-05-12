@@ -156,6 +156,8 @@ void decideNext(float rain, float battery){
 }
 
 
+
+
 void movingState(){
   std::cout << "Moving" << std::endl;
   switch(myDirectionNext){
@@ -292,6 +294,66 @@ void chargingState(float battery){
     }
 }
 
+auto goingToLastPointState(){
+    int myDiffI = myLastPosI - myPosI;
+    int myDiffJ = myLastPosJ - myPosJ;
+    if (myDiffI == 0 && myDiffJ == 0){
+      //reach last point
+      myAtLastPos = 0;
+      myCommand = 0;
+      od4.send(control);
+      std::cout << "Reach Last point" << std::endl;
+    }else{
+      myAtLastPos = 1;
+      std::cout << "Moving to Last Point..." << std::endl;
+      if (myLastPosJ <= 20){
+        //Target in room1
+        if(myDiffI != 0){
+          //Move right first
+          myCommand = 4;
+          myPosI = myPosI+1;
+        }else{
+          //Then Move down
+          myCommand = 6;
+          myPosJ = myPosJ+1;
+        }
+      }else{
+        //Target in room2
+        if(myPosJ<=21 ){
+          //In Room 1
+          if(myPosI<=29){
+            //Move right
+            myCommand = 4;
+            myPosI = myPosI+1;
+          }else{
+            //Move down
+            myCommand = 6;
+            myPosJ = myPosJ+1;
+          }
+        }else{
+          //In Room 2
+          if(myDiffJ != 0){
+            //Move down
+            myCommand = 6;
+            myPosJ = myPosJ+1;
+          }else{
+            if(myDiffI > 0){
+              //Move right
+              myCommand = 4;
+              myPosI = myPosI+1;
+            }else{
+              //Move left
+              myCommand = 8;
+              myPosI = myPosI-1;
+            }
+          }
+        }
+      }
+    } 
+}
+
+
+
 int32_t main(int32_t argc, char **argv) {
   int32_t retCode{0};
   auto commandlineArguments = cluon::getCommandlineArguments(argc, argv);
@@ -310,79 +372,6 @@ int32_t main(int32_t argc, char **argv) {
     
     cluon::OD4Session od4{cid};
 
-
-
-    auto goingToLastPointState{[&od4](cluon::data::Envelope &&envelope)
-      {
-        auto msg = cluon::extractMessage<tme290::grass::Sensors>(
-            std::move(envelope));
-        int myDiffI = myLastPosI - myPosI;
-        int myDiffJ = myLastPosJ - myPosJ;
-        tme290::grass::Control control;
-
-        if (myDiffI == 0 && myDiffJ == 0){
-          //reach last point
-          myAtLastPos = 0;
-          myState = stateDecideNext;
-          control.command(0);
-          od4.send(control);
-          std::cout << "Reach Last point" << std::endl;
-        }else{
-          myAtLastPos = 1;
-          std::cout << "Moving to Last Point..." << std::endl;
-          if (myLastPosJ <= 20){
-            //Target in room1
-            if(myDiffI != 0){
-              //Move right first
-              control.command(4);
-              od4.send(control);
-              myPosI = myPosI+1;
-            }else{
-              //Then Move down
-              control.command(6);
-              od4.send(control);
-              myPosJ = myPosJ+1;
-            }
-          }else{
-            //Target in room2
-            if(myPosJ<=21 ){
-              //In Room 1
-              if(myPosI<=29){
-                //Move right
-                control.command(4);
-                od4.send(control);
-                myPosI = myPosI+1;
-              }else{
-                //Move down
-                control.command(6);
-                od4.send(control);
-                myPosJ = myPosJ+1;
-              }
-            }else{
-              //In Room 2
-              if(myDiffJ != 0){
-                //Move down
-                control.command(6);
-                od4.send(control);
-                myPosJ = myPosJ+1;
-              }else{
-                if(myDiffI > 0){
-                  //Move right
-                  control.command(4);
-                  od4.send(control);
-                  myPosI = myPosI+1;
-                }else{
-                  //Move left
-                  control.command(1);
-                  od4.send(control); 
-                  myPosI = myPosI-1;
-                }
-              }
-            }
-          }
-        }
-
-      }};
 
     auto onSensors{[&od4](cluon::data::Envelope &&envelope)
       {
@@ -422,6 +411,10 @@ int32_t main(int32_t argc, char **argv) {
             std::cout << "State: Charging" << std::endl;
             chargingState(myBattery);
             break;
+          case stateGoToLastPoint:
+            std::cout << "State: stateGoToLastPoint" << std::endl;
+            goingToLastPointState();
+            break;
           default :
             std::cout << "State Unknown" << std::endl;
         }
@@ -455,9 +448,6 @@ int32_t main(int32_t argc, char **argv) {
     od4.send(control);
     /*
 
-      case stateCharging :
-        od4.dataTrigger(tme290::grass::Sensors::ID(), chargingState);
-        break;
       case stateGoToLastPoint:
         od4.dataTrigger(tme290::grass::Sensors::ID(), goingToLastPointState);
         break;

@@ -431,16 +431,15 @@ int32_t main(int32_t argc, char **argv) {
         myGrassLeft = msg.grassLeft();
         myRain = msg.rain();
         myBattery = msg.battery();
-        
-        if(myState == 1){
-          decideNext(myRain, myBattery);
 
-        }else{
-          std::cout << "Not state 1: " << myState << std::endl;
+        switch(myState){
+          case stateDecideNext:
+            decideNext(myRain, myBattery);
+            break;
+          default :
+            default :
+            std::cout << "State Unknown" << std::endl;
         }
-
-
-
         tme290::grass::Control control;
         control.command(myCommand);
         od4.send(control);

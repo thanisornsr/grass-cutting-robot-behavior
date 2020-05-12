@@ -178,7 +178,7 @@ int32_t main(int32_t argc, char **argv) {
 
     auto movingState{[&od4](cluon::data::Envelope &&envelope)
     {
-      updateDirectionNext();
+      od4.dataTrigger(tme290::grass::Sensors::ID(), updateDirectionNext);
       auto msg = cluon::extractMessage<tme290::grass::Sensors>(
             std::move(envelope));
       tme290::grass::Control control;

@@ -231,8 +231,9 @@ void movingState(){
   //Done Moving and update current position
   //Then calculate minimum battery
   int myDistanceToHome = myPosI + myPosJ;
+  std::cout << "Position"<< myPosI<<","<<myPosJ<< std::endl;
   myBatteryToHome = (float) myDistanceToHome * myBatteryDrainRate; // This 0.02 are battery drain per one step
-
+  std::cout << "New Battery limit"<< myBatteryToHome  << std::endl;
   myJustMove = 1;
   myState = stateDecideNext;
 }
@@ -268,7 +269,7 @@ void goingHomeState()
 {
   if (myPosI == 0 and myPosJ == 0){
     //Reach Home Move to Charging
-    myCommand = 8;
+    myCommand = 0;
     myState = stateCharging;
     myGoingHome = 0;
     std::cout << "I'm Home" << std::endl;
@@ -318,6 +319,8 @@ void chargingState(float battery){
       myCommand = 0;
       myState = stateDecideNext;
       std::cout << "Charge Done" << std::endl;
+      myPosI = 0;
+      myPosJ = 0;
     }else{
       myCharging = 1;
       myCommand = 0;

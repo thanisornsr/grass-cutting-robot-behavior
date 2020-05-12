@@ -210,6 +210,7 @@ void decideNext(float rain, float battery, float grassCentre){
 
 void movingState(){
   std::cout << "Moving" << std::endl;
+  std::cout << "My Direction"<< myDirectionNext<< std::endl;
   switch(myDirectionNext){
     case 1:
       myCommand = 1;

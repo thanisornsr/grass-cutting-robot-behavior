@@ -20,9 +20,25 @@
 #include "cluon-complete.hpp"
 #include "tme290-sim-grass-msg.hpp"
 
+// here is to define parameter
+int32_t myState = 0;
+std::cout << myState << std::endl;
+float myGrass;
+float myRain;
+float myBattery;
+int myPosI;
+int myPosJ;
+float myTargetCut;
+float myMaxGrassNear;
+int myJustMove = 0;
+int myGoingHome = 0;
+int myCharging = 0;
+myState = 1;
+std::cout << myState << std::endl;
 int32_t main(int32_t argc, char **argv) {
   int32_t retCode{0};
   auto commandlineArguments = cluon::getCommandlineArguments(argc, argv);
+
   if (0 == commandlineArguments.count("cid")) {
     std::cerr << argv[0] 
       << " is a lawn mower control algorithm." << std::endl;

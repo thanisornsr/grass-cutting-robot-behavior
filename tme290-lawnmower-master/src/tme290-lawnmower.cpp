@@ -209,7 +209,7 @@ void movingState(){
 
 void stayAndCutState(float battery, float grassCentre)
 {
-  if (myBattery < myBatteryToHome){
+  if (battery < myBatteryToHome){
     //Low battery Gohome!
     std::cout << "Low Battery, Going Home From cut" << std::endl;
     //Remember last point
@@ -429,7 +429,8 @@ int32_t main(int32_t argc, char **argv) {
             break;
           case stateStayAndCut:
             std::cout << "State: Cutting" << std::endl;
-            stayAndCutState(myBattery, myGrassCentre)
+            stayAndCutState(myBattery, myGrassCentre);
+            break;
           default :
             std::cout << "State Unknown" << std::endl;
         }

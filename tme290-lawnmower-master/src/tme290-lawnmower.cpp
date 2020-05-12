@@ -383,12 +383,14 @@ void chargingState(float battery, float grassCentre){
       myPosJ = 0;
     }else{
       myCharging = 1;
-      if (grassCentre > 0){
+      if (grassCentre > 0.0f){
         // Something happened and it's not at home properly >> Keep moving to lefttop, dying
         if (myTryToGoHome == 0){
+          std::cout << "Not Home yet: Move left" << std::endl;
           myCommand = 8;
           myTryToGoHome = 1;
         }else{
+          std::cout << "Not Home yet: Move up" << std::endl;
           myCommand = 2;
           myTryToGoHome = 0;
         }

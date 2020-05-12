@@ -502,7 +502,8 @@ int32_t main(int32_t argc, char **argv) {
         myRain = msg.rain();
         myBattery = msg.battery();
 
-        if (myBattery < 0.02f){
+        if (myBattery < 0.001f){
+          myCommand = 0;
           std::cout << "I'm Dead!!!!"<< myPosI<<","<<myPosJ<< std::endl;
         }else{
           switch(myState){

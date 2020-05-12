@@ -87,7 +87,7 @@ void foo(){
   myCharging = 0;
   myPosI = 0;
   myPosJ = 0;
-  myAtLastPos = 0;
+  myAtLastPos = 1;
   
   myState = stateDecideNext;
 
@@ -96,7 +96,7 @@ void foo(){
   // Maximum charge
   myMaximumCharge = 0.98f;
   // Battery drain per step
-  myBatteryDrainRate = 0.02f;
+  myBatteryDrainRate = 0.03f;
   // Cutting Target
   myTargetCut = 0.3f;
 }
@@ -159,7 +159,7 @@ void decideNext(float rain, float battery){
     myLastPosJ = myPosJ;
     myState = stateGoBackHome;
   }else{
-    if (myAtLastPos == 1){
+    if (myAtLastPos == 0){
       //Going to last pos
       myCommand = 0;
       myState = stateGoToLastPoint;
@@ -274,6 +274,7 @@ void goingHomeState()
     std::cout << "I'm Home" << std::endl;
   }else{
     myGoingHome = 1;
+    myAtLastPos = 0;
     std::cout << "Going Home" << std::endl;
     //Not home yet, Keep moving
     if (myPosJ >= 20) {
@@ -329,11 +330,11 @@ auto goingToLastPointState(){
     int myDiffJ = myLastPosJ - myPosJ;
     if (myDiffI == 0 && myDiffJ == 0){
       //reach last point
-      myAtLastPos = 0;
+      myAtLastPos = 1;
       myCommand = 0;
       std::cout << "Reach Last point" << std::endl;
     }else{
-      myAtLastPos = 1;
+      myAtLastPos = 0;
       std::cout << "Moving to Last Point..." << std::endl;
       if (myLastPosJ <= 20){
         //Target in room1

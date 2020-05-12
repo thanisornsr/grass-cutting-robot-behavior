@@ -544,6 +544,7 @@ int32_t main(int32_t argc, char **argv) {
         tme290::grass::Control control;
         control.command(myCommand);
         od4.send(control);
+        std::cout << "Grass sensor centre"<< myGrassCentre  << std::endl;
         std::cout << "Battery limit"<< myBatteryToHome  << std::endl;
         std::cout << "Battery current"<< myBattery  << std::endl;
       }};

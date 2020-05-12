@@ -425,7 +425,10 @@ int32_t main(int32_t argc, char **argv) {
       {
         auto msg = cluon::extractMessage<tme290::grass::Sensors>(
             std::move(envelope));
-        std::cout << "I Reach Here "<< std::endl;
+        std::cout << msg.grassRight() << std::endl;
+        tme290::grass::Control control;
+        control.command(0);
+        od4.send(control)
       }};
 
 

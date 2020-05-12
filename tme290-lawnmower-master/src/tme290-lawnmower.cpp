@@ -377,7 +377,7 @@ void goingHomeState()
 }
 
 
-void chargingState(float battery, float grassCentre){
+void chargingState(float battery, float grassTopCentre, float grassLeft){
     //Keep stay and checking bettery
     if (battery >= myMaximumCharge){
       myCharging = 0;
@@ -388,7 +388,7 @@ void chargingState(float battery, float grassCentre){
       myPosJ = 0;
     }else{
       myCharging = 1;
-      if (grassCentre > 0.005f){
+      if (grassTopCentre < 0.0f && grassLeft < 0.0f){
         // Something happened and it's not at home properly >> Keep moving to lefttop, dying
         if (myTryToGoHome == 0){
           std::cout << "Not Home yet: Move left" << std::endl;
@@ -531,7 +531,7 @@ int32_t main(int32_t argc, char **argv) {
               break;
             case stateCharging:
               std::cout << "State: Charging" << std::endl;
-              chargingState(myBattery,myGrassCentre);
+              chargingState(myBattery,myGrassTopCentre,myGrassLeft);
               break;
             case stateGoToLastPoint:
               std::cout << "State: stateGoToLastPoint" << std::endl;
@@ -569,7 +569,7 @@ int32_t main(int32_t argc, char **argv) {
 
         }
         myTimeCounter = myTimeCounter + 1;
-        std::cout << "Grass sensor centre"<< myGrassCentre  << std::endl;
+        std::cout << "Grass sensor TopCenter and left"<< myGrassTopCentre<<myGrassTopLeft  << std::endl;
         std::cout << "Battery limit"<< myBatteryToHome  << std::endl;
         std::cout << "Battery current"<< myBattery  << std::endl;
       }};

@@ -51,6 +51,7 @@ float myTargetCut;
 float myAllowPass;
 float myBatteryToHome; // This will be auto-tune depend on Bettery DrainRate;
 int rainMaxStep;
+float myDirectionThreshold;
 
 //These parameter to store sensor value
 float myGrassTopLeft;
@@ -98,6 +99,8 @@ void foo(){
   rainMaxStep = 60;
   // Allow passing cutting this step and continue moving
   myAllowPass = 0.7f;
+  // If neighbour grass status is above this threshold >> Room 1 go bottom left >> Room 2 go bottom right
+  myDirectionThreshold = 0.5f;
 }
 
 void updateDirectionNext(float grassTopLeft, float grassTopCentre, float grassTopRight, float grassRight, 
@@ -145,6 +148,18 @@ void updateDirectionNext(float grassTopLeft, float grassTopCentre, float grassTo
   if (grassLeft > maxGrassNear) {
       maxGrassNear = grassLeft;
       maxGrassDir = 8;
+  }
+
+  if(maxGrassNear < myDirectionThreshold){
+      if(myPoj <= 20){
+        // In room 1 // go bottom left
+        maxGrassDir = 5;
+      }else{
+        // In room 2 // go bottom right
+        maxGrassDir = 7;
+      }
+
+
   }
 
 

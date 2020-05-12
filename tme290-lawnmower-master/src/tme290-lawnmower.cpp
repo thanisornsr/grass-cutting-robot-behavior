@@ -37,6 +37,7 @@ int myGoingHome;
 int myCharging;
 int myAtLastPos;
 int rainCounter;
+int myTryToGoHome;
 
 //This is for positioning
 int myLastPosI;
@@ -85,6 +86,7 @@ void foo(){
   myPosJ = 0;
   myAtLastPos = 1;
   rainCounter = 0;
+  myTryToGoHome = 0;
   myState = stateDecideNext;
 
 
@@ -92,7 +94,8 @@ void foo(){
   // Maximum charge
   myMaximumCharge = 0.98f;
   // Battery drain per step
-  myBatteryDrainRate = 0.01f;
+  //myBatteryDrainRate = 0.01f;
+  myBatteryDrainRate = 0.05f;
   // Cutting Target
   myTargetCut = 0.2f;
   // Max step of rainning before go home
@@ -286,7 +289,7 @@ void movingState(){
   }
   //Done Moving and update current position
   //Then calculate minimum battery
-  int myDistanceToHome = myPosI + myPosJ;
+  int myDistanceToHome = myPosI*myPosI + myPosJ*myPosJ;
   std::cout << "Position"<< myPosI<<","<<myPosJ<< std::endl;
   myBatteryToHome = (float) myDistanceToHome * myBatteryDrainRate; // This 0.02 are battery drain per one step
   myState = stateDecideNext;
@@ -380,7 +383,15 @@ void chargingState(float battery){
       myPosJ = 0;
     }else{
       myCharging = 1;
-      myCommand = 0;
+      //myCommand = 0;
+      //in case some weird thing happend>> Keep moving to lefttop, dying
+      if (myTryToGoHome == 0){
+        myCommand = 8;
+        myTryToGoHome = 1;
+      }else{
+        myCommand = 2;
+        myTryToGoHome = 0;
+      }
       std::cout << "Charging" << std::endl;
     }
 }

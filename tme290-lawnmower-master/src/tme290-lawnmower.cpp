@@ -446,7 +446,7 @@ int32_t main(int32_t argc, char **argv) {
     if (verbose) {
       std::cout << "All systems ready, let's cut some grass!" << std::endl;
     }
-
+    std::cout << "Mystate: " << myState << std::endl;
     switch(myState){
       case stateDecideNext :
         od4.dataTrigger(tme290::grass::Sensors::ID(), decideNext);

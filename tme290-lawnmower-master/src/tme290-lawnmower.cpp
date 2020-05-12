@@ -83,11 +83,9 @@ int32_t main(int32_t argc, char **argv) {
     
     cluon::OD4Session od4{cid};
     // Functions
-    auto updateDirectionNext{[&od4](cluon::data::Envelope &&envelope){
+    auto updateDirectionNext(){
       float maxGrassNear = 0.0f;
       int maxGrassDir = 0;
-      auto msg = cluon::extractMessage<tme290::grass::Sensors>(
-            std::move(envelope));      
       //next is the maximum grass direction
       // check 1
       if (msg.grassTopLeft() > maxGrassNear) {
@@ -132,7 +130,7 @@ int32_t main(int32_t argc, char **argv) {
       myDirectionNext = maxGrassDir;
 
 
-    }};
+    };
 
 
     auto decideNext{[&od4](cluon::data::Envelope &&envelope)
@@ -178,7 +176,7 @@ int32_t main(int32_t argc, char **argv) {
 
     auto movingState{[&od4](cluon::data::Envelope &&envelope)
     {
-      od4.dataTrigger(tme290::grass::Sensors::ID(), updateDirectionNext);
+      updateDirectionNext();
       auto msg = cluon::extractMessage<tme290::grass::Sensors>(
             std::move(envelope));
       tme290::grass::Control control;

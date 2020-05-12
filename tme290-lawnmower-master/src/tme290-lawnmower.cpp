@@ -54,6 +54,7 @@ float myGrassBottomRight;
 float myGrassBottomCentre;
 float myGrassBottomLeft;
 float myGrassLeft;
+float myGrassCentre;
 int myState;
 
 void foo(){
@@ -206,7 +207,30 @@ void movingState(){
 }
 
 
-
+void stayAndCutState(float battery, float grassCentre)
+{
+  if (myBattery < myBatteryToHome){
+    //Low battery Gohome!
+    std::cout << "Low Battery, Going Home From cut" << std::endl;
+    //Remember last point
+    myLastPosI = myPosI;
+    myLastPosJ = myPosJ;
+    myCommand = 0;
+    myState = stateGoBackHome;
+  }else{
+    //Check center grass
+    if (grassCentre >= myTargetCut){
+      // Keep cutting
+      std::cout << "Cutting..." << std::endl;
+      myCommand = 0;           
+    }else{
+      // Done cutting
+      std::cout << "Cut Done" << std::endl;
+      myState = stateDecideNext;
+      myCommand = 0;
+    }
+  }
+}
 
 int32_t main(int32_t argc, char **argv) {
   int32_t retCode{0};
@@ -227,37 +251,7 @@ int32_t main(int32_t argc, char **argv) {
     cluon::OD4Session od4{cid};
 
 
-    auto stayAndCutState{[&od4](cluon::data::Envelope &&envelope)
-      {
-        auto msg = cluon::extractMessage<tme290::grass::Sensors>(
-            std::move(envelope));
-        myBattery = msg.battery();
-        tme290::grass::Control control;
-        if (myBattery < myBatteryToHome){
-          //Low battery Gohome!
-          std::cout << "Low Battery, Going Home From cut" << std::endl;
-          //Remember last point
-          myLastPosI = myPosI;
-          myLastPosJ = myPosJ;
-          control.command(0);
-          od4.send(control); 
-          myState = stateGoBackHome;
-        }else{
-          //Check center grass
-          if (msg.grassCentre() >= myTargetCut){
-            // Keep cutting
-            std::cout << "Cutting..." << std::endl;
-            control.command(0);
-            od4.send(control);            
-          }else{
-            // Done cutting
-            std::cout << "Cut Done" << std::endl;
-            myState = stateDecideNext;
-            control.command(0);
-            od4.send(control); 
-          }
-        }
-      }};
+    
 
     auto goingHomeState{[&od4](cluon::data::Envelope &&envelope)
       {
@@ -419,6 +413,7 @@ int32_t main(int32_t argc, char **argv) {
         myGrassBottomCentre = msg.grassBottomCentre();
         myGrassBottomLeft = msg.grassBottomLeft();
         myGrassLeft = msg.grassLeft();
+        myGrassCentre = msg.grassCentre();
         myRain = msg.rain();
         myBattery = msg.battery();
 
@@ -432,6 +427,9 @@ int32_t main(int32_t argc, char **argv) {
             updateDirectionNext(myGrassTopLeft,myGrassTopCentre,myGrassTopRight,myGrassRight,myGrassBottomRight, myGrassBottomCentre, myGrassBottomLeft,myGrassLeft);
             movingState();
             break;
+          case stateStayAndCut:
+            std::cout << "State: Cutting" << std::endl;
+            stayAndCutState(myBattery, myGrassCentre)
           default :
             std::cout << "State Unknown" << std::endl;
         }
@@ -463,21 +461,7 @@ int32_t main(int32_t argc, char **argv) {
     tme290::grass::Control control;
     control.command(0);
     od4.send(control);
-    /*if (myState == 1){
-      //state 1
-      
-      od4.dataTrigger(tme290::grass::Sensors::ID(), decideNext);
-    }else{
-      std::cout << "To be add" << std::endl;
-    }*/
-    /*switch(myState){
-      case stateDecideNext :
-        od4.dataTrigger(tme290::grass::Sensors::ID(), decideNext);
-        break;
-      case stateMoving :
-        od4.dataTrigger(tme290::grass::Sensors::ID(), updateDirectionNext);
-        od4.dataTrigger(tme290::grass::Sensors::ID(), movingState);
-        break;
+    /*
       case stateStayAndCut :
         od4.dataTrigger(tme290::grass::Sensors::ID(), stayAndCutState);
         break;

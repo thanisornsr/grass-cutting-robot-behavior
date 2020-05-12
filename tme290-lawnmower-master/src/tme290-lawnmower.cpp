@@ -101,8 +101,8 @@ int32_t main(int32_t argc, char **argv) {
           maxGrassDir = 1;
       }
       // check 2
-      if (msg.grassTopCenter() > maxGrassNear) {
-          maxGrassNear = msg.grassTopCenter();
+      if (msg.grassTopCentre() > maxGrassNear) {
+          maxGrassNear = msg.grassTopCentre();
           maxGrassDir = 2;
       }
       // check 3
@@ -121,8 +121,8 @@ int32_t main(int32_t argc, char **argv) {
           maxGrassDir = 5;
       }
       // check 6
-      if (msg.grassBottomCenter() > maxGrassNear) {
-          maxGrassNear = msg.grassBottomCenter();
+      if (msg.grassBottomCentre() > maxGrassNear) {
+          maxGrassNear = msg.grassBottomCentre();
           maxGrassDir = 6;
       }
       // check 7
@@ -138,7 +138,7 @@ int32_t main(int32_t argc, char **argv) {
       myDirectionNext = maxGrassDir;
 
 
-    }
+    }};
 
 
     auto decideNext{[&od4](cluon::data::Envelope &&envelope)

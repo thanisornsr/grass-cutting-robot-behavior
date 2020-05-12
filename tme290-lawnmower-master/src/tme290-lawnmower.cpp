@@ -35,12 +35,12 @@ int myCharging;
 
 void foo(){
   myState = 0;
-  cout << myState;
+  std::cout << myState << std::endl;
   myJustMove = 0;
   myGoingHome = 0;
   myCharging = 0;
   myState = 1;
-  cout << myState;
+  std::cout << myState << std::endl;
 }
 
 

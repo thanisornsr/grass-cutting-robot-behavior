@@ -74,7 +74,6 @@ void foo(){
 void updateDirectionNext(float grassTopLeft, float grassTopCentre, float grassTopRight, float grassRight, 
       float grassBottomRight, float grassBottomCentre, float grassBottomLeft, float grassLeft)
 {
-  std::cout << "I Reach Here "<< std::endl;
   float maxGrassNear = 0.0f;
   int maxGrassDir = 0;
   //next is the maximum grass direction
@@ -232,6 +231,53 @@ void stayAndCutState(float battery, float grassCentre)
   }
 }
 
+
+void goingHomeState()
+{
+  if (myPosI == 0 and myPosJ == 0){
+    //Reach Home Move to Charging
+    myCommand = 0;
+    myState = stateCharging;
+    myGoingHome = 0;
+    std::cout << "I'm Home" << std::endl;
+  }else{
+    myGoingHome = 1;
+    std::cout << "Going Home" << std::endl;
+    //Not home yet, Keep moving
+    if (myPosJ >= 20) {
+      //Behind wall case Room2
+      if(myPosI <= 29) {
+        //on the left side go right first
+        myCommand = 4;
+        myPosI = myPosI+1;
+      }else{
+        //on the right go up
+        myCommand = 2;
+        myPosJ = myPosJ-1;
+      }
+    }else{
+      //Room1
+      if (myPosI > 0 && myPosJ > 0 ){
+        //move topleft
+        myCommand = 1;
+        myPosI = myPosI-1;
+        myPosJ = myPosJ-1;
+      }else{
+        if(myPosI > 0){
+          // move left
+          myCommand = 8;
+          myPosI = myPosI-1;
+        }else{
+          // move up
+          myCommand = 2;
+          myPosJ = myPosJ-1;
+        }
+      }
+    }
+  }
+}
+
+
 int32_t main(int32_t argc, char **argv) {
   int32_t retCode{0};
   auto commandlineArguments = cluon::getCommandlineArguments(argc, argv);
@@ -253,60 +299,7 @@ int32_t main(int32_t argc, char **argv) {
 
     
 
-    auto goingHomeState{[&od4](cluon::data::Envelope &&envelope)
-      {
-        auto msg = cluon::extractMessage<tme290::grass::Sensors>(
-            std::move(envelope));
-        tme290::grass::Control control;
-        if (myPosI == 0 and myPosJ == 0){
-          //Reach Home Move to Charging
-          control.command(0);
-          od4.send(control);
-          myState = stateCharging;
-          myGoingHome = 0;
-          std::cout << "I'm Home" << std::endl;
-        }else{
-          myGoingHome = 1;
-          std::cout << "Going Home" << std::endl;
-          //Not home yet, Keep moving
-          if (myPosJ >= 20) {
-            //Behind wall case Room2
-            if(myPosI <= 29) {
-              //on the left side go right first
-              control.command(4);
-              od4.send(control);
-              myPosI = myPosI+1;
-            }else{
-              //on the right go up
-              control.command(2);
-              od4.send(control);
-              myPosJ = myPosJ-1;
-            }
-          }else{
-            //Room1
-            if (myPosI > 0 && myPosJ > 0 ){
-              //move topleft
-              control.command(1);
-              od4.send(control);
-              myPosI = myPosI-1;
-              myPosJ = myPosJ-1;
-            }else{
-              if(myPosI > 0){
-                // move left
-                control.command(1);
-                od4.send(control); 
-                myPosI = myPosI-1;
-              }else{
-                // move right
-                control.command(2);
-                od4.send(control);
-                myPosJ = myPosJ-1;
-              }
-            }
-          }
-
-        }
-      }};
+    
 
     auto chargingState{[&od4](cluon::data::Envelope &&envelope)
       {
@@ -431,6 +424,10 @@ int32_t main(int32_t argc, char **argv) {
             std::cout << "State: Cutting" << std::endl;
             stayAndCutState(myBattery, myGrassCentre);
             break;
+          case stateGoBackHome:
+            std::cout << "State: GoBackHome" << std::endl;
+            goingHomeState();
+            break;
           default :
             std::cout << "State Unknown" << std::endl;
         }
@@ -463,12 +460,7 @@ int32_t main(int32_t argc, char **argv) {
     control.command(0);
     od4.send(control);
     /*
-      case stateStayAndCut :
-        od4.dataTrigger(tme290::grass::Sensors::ID(), stayAndCutState);
-        break;
-      case stateGoBackHome :
-        od4.dataTrigger(tme290::grass::Sensors::ID(), goingHomeState);
-        break;
+
       case stateCharging :
         od4.dataTrigger(tme290::grass::Sensors::ID(), chargingState);
         break;

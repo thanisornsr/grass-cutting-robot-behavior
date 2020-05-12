@@ -91,7 +91,7 @@ void foo(){
   // Maximum charge
   myMaximumCharge = 0.98f;
   // Battery drain per step
-  myBatteryDrainRate = 0.01f;
+  myBatteryDrainRate = 0.011f;
   // Cutting Target
   myTargetCut = 0.3f;
   // Max step of rainning before go home
@@ -146,6 +146,8 @@ void updateDirectionNext(float grassTopLeft, float grassTopCentre, float grassTo
       maxGrassNear = grassLeft;
       maxGrassDir = 8;
   }
+
+
   myDirectionNext = maxGrassDir;
 }
 
@@ -216,38 +218,50 @@ void movingState(){
       myCommand = 1;
       myPosI = myPosI-1;
       myPosJ = myPosJ-1;
+      myJustMove = 1;
       break;
     case 2:
       myCommand =2;
       myPosJ = myPosJ-1;
+      myJustMove = 1;
       break;
     case 3:
       myCommand = 3;
       myPosI = myPosI+1;
       myPosJ = myPosJ-1;
+      myJustMove = 1;
       break;
     case 4:
       myCommand = 4;
       myPosI = myPosI+1;
+      myJustMove = 1;
       break;
     case 5:
       myCommand = 5;
       myPosI = myPosI+1;
       myPosJ = myPosJ+1;
+      myJustMove = 1;
       break;
     case 6:
       myCommand = 6;
       myPosJ = myPosJ+1;
+      myJustMove = 1;
       break;
     case 7:
       myCommand = 7;
       myPosI = myPosI-1;
       myPosJ = myPosJ+1;
+      myJustMove = 1;
       break;
     case 8:
       myCommand = 8;
       myPosI = myPosI-1;
+      myJustMove = 1;
       break;
+    default:
+      myCommand = 0;
+      myJustMove = 0;
+      //If something wrong happened >> Stay strong.
   }
   //Done Moving and update current position
   //Then calculate minimum battery
@@ -255,7 +269,6 @@ void movingState(){
   std::cout << "Position"<< myPosI<<","<<myPosJ<< std::endl;
   myBatteryToHome = (float) myDistanceToHome * myBatteryDrainRate; // This 0.02 are battery drain per one step
   std::cout << "New Battery limit"<< myBatteryToHome  << std::endl;
-  myJustMove = 1;
   myState = stateDecideNext;
 }
 
@@ -481,6 +494,7 @@ int32_t main(int32_t argc, char **argv) {
               myAtLastPos = 1;
               updateDirectionNext(myGrassTopLeft,myGrassTopCentre,myGrassTopRight,myGrassRight,myGrassBottomRight, myGrassBottomCentre, myGrassBottomLeft,myGrassLeft);
               movingState();
+
               break;
             default :
               std::cout << "State Unknown" << std::endl;

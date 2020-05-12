@@ -21,8 +21,7 @@
 #include "tme290-sim-grass-msg.hpp"
 
 // here is to define parameter
-int32_t myState = 0;
-cout << myState;
+int32_t myState;
 float myGrass;
 float myRain;
 float myBattery;
@@ -30,12 +29,21 @@ int myPosI;
 int myPosJ;
 float myTargetCut;
 float myMaxGrassNear;
-int myJustMove = 0;
-int myGoingHome = 0;
-int myCharging = 0;
-myState = 1;
-cout << "HELLO";
-cout << myState;
+int myJustMove;
+int myGoingHome;
+int myCharging;
+
+void foo(){
+  myState = 0;
+  cout << myState;
+  myJustMove = 0;
+  myGoingHome = 0;
+  myCharging = 0;
+  myState = 1;
+  cout << myState;
+}
+
+
 int32_t main(int32_t argc, char **argv) {
   int32_t retCode{0};
   auto commandlineArguments = cluon::getCommandlineArguments(argc, argv);
@@ -47,6 +55,9 @@ int32_t main(int32_t argc, char **argv) {
     std::cerr << "Example: " << argv[0] << " --cid=111 --verbose" << std::endl;
     retCode = 1;
   } else {
+    foo();
+    std::cout << "Hello!" << std::endl;
+
     bool const verbose{commandlineArguments.count("verbose") != 0};
     uint16_t const cid = std::stoi(commandlineArguments["cid"]);
     

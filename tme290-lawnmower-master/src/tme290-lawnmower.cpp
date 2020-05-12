@@ -98,7 +98,7 @@ void foo(){
   // Max step of rainning before go home
   rainMaxStep = 20;
   // Allow passing cutting this step and continue moving
-  myAllowPass = 0.7f;
+  myAllowPass = 0.5f;
   // If neighbour grass status is above this threshold >> Room 1 go bottom left >> Room 2 go bottom right
   myDirectionThreshold = 0.3f;
 }
@@ -151,15 +151,15 @@ void updateDirectionNext(float grassTopLeft, float grassTopCentre, float grassTo
   }
 
   if(maxGrassNear < myDirectionThreshold){
-      if(myPosJ <= 20){
+      if(myPosJ <15 && myPosI < 35){
         // In room 1 // go bottom left
-        maxGrassDir = 5;
+          maxGrassDir = 5;  
       }else{
         // In room 2 // go bottom right
-        maxGrassDir = 7;
+        if(myPosJ < 35 && myPosI > 5){
+          maxGrassDir = 8;
+        }
       }
-
-
   }
 
 

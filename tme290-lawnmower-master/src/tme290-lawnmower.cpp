@@ -140,7 +140,7 @@ int32_t main(int32_t argc, char **argv) {
       {
         auto msg = cluon::extractMessage<tme290::grass::Sensors>(
             std::move(envelope));
-        if (verbose) {
+        
         myRain = msg.rain();
         myBattery = msg.battery();
         tme290::grass::Control control;
@@ -176,7 +176,7 @@ int32_t main(int32_t argc, char **argv) {
             }
           }
         }
-        }
+        
     }};
 
 
@@ -421,11 +421,12 @@ int32_t main(int32_t argc, char **argv) {
 
       }};
 
-    /*auto onSensors{[&od4](cluon::data::Envelope &&envelope)
+    auto onSensors{[&od4](cluon::data::Envelope &&envelope)
       {
         auto msg = cluon::extractMessage<tme290::grass::Sensors>(
             std::move(envelope));
-      }};*/
+        std::cout << "I Reach Here "<< std::endl;
+      }};
 
 
 
@@ -451,7 +452,7 @@ int32_t main(int32_t argc, char **argv) {
     if (myState == 1){
       //state 1
       std::cout << "Maybe Here" << std::endl;
-      od4.dataTrigger(tme290::grass::Sensors::ID(), decideNext);
+      od4.dataTrigger(tme290::grass::Sensors::ID(), onSensors);
     }else{
       std::cout << "To be add" << std::endl;
     }

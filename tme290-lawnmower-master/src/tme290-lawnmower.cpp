@@ -154,7 +154,7 @@ void updateDirectionNext(float grassTopLeft, float grassTopCentre, float grassTo
       if(myPosJ <15 && myPosI < 37){
         // In room 1 // go bottom left
 
-          maxGrassDir = 5;
+          maxGrassDir = 4;
 
       }else{
         if(myPosJ<20 && myPosI < 37 ){

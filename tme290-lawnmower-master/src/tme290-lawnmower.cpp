@@ -379,7 +379,7 @@ void goingHomeState()
 }
 
 
-void chargingState(float battery, float grassTopCentre, float grassLeft){
+void chargingState(float battery){
     //Keep stay and checking bettery
     if (battery >= myMaximumCharge){
       myCharging = 0;
@@ -541,7 +541,7 @@ int32_t main(int32_t argc, char **argv) {
               break;
             case stateCharging:
               std::cout << "State: Charging" << std::endl;
-              chargingState(myBattery,myGrassTopCentre,myGrassLeft);
+              chargingState(myBattery);
               break;
             case stateGoToLastPoint:
               std::cout << "State: stateGoToLastPoint" << std::endl;

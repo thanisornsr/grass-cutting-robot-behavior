@@ -273,6 +273,7 @@ void goingHomeState()
     myState = stateCharging;
     myGoingHome = 0;
     std::cout << "I'm Home" << std::endl;
+    std::cout << "Position"<< myPosI<<","<<myPosJ<< std::endl;
   }else{
     myGoingHome = 1;
     myAtLastPos = 0;
@@ -307,6 +308,7 @@ void goingHomeState()
           myPosJ = myPosJ-1;
         }
       }
+      std::cout << "Position"<< myPosI<<","<<myPosJ<< std::endl;
     }
   }
 }
@@ -383,6 +385,7 @@ auto goingToLastPointState(){
           }
         }
       }
+      std::cout << "Position"<< myPosI<<","<<myPosJ<< std::endl;
     } 
 }
 

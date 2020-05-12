@@ -450,7 +450,7 @@ int32_t main(int32_t argc, char **argv) {
     std::cout << "Mystate: " << myState << std::endl;
 
 
-    if (myState = 1){
+    if (myState == 1){
       //state 1
       od4.dataTrigger(tme290::grass::Sensors::ID(), decideNext);
     }else{

@@ -278,6 +278,20 @@ void goingHomeState()
 }
 
 
+void chargingState(float battery){
+    //Keep stay and checking bettery
+    if (battery >= 0.98f){
+      myCharging = 0;
+      myCommand = 0;
+      myState = stateDecideNext;
+      std::cout << "Charge Done" << std::endl;
+    }else{
+      myCharging = 1;
+      myCommand = 0;
+      std::cout << "Charging" << std::endl;
+    }
+}
+
 int32_t main(int32_t argc, char **argv) {
   int32_t retCode{0};
   auto commandlineArguments = cluon::getCommandlineArguments(argc, argv);
@@ -297,30 +311,6 @@ int32_t main(int32_t argc, char **argv) {
     cluon::OD4Session od4{cid};
 
 
-    
-
-    
-
-    auto chargingState{[&od4](cluon::data::Envelope &&envelope)
-      {
-        auto msg = cluon::extractMessage<tme290::grass::Sensors>(
-            std::move(envelope));
-        //Keep stay and checking bettery
-        myBattery = msg.battery();
-        tme290::grass::Control control;
-        if (myBattery >= 0.98f){
-          myCharging = 0;
-          control.command(0);
-          od4.send(control);
-          myState = stateDecideNext;
-          std::cout << "Charge Done" << std::endl;
-        }else{
-          myCharging = 1;
-          control.command(0);
-          od4.send(control);
-          std::cout << "Charging" << std::endl;
-        }
-      }};
 
     auto goingToLastPointState{[&od4](cluon::data::Envelope &&envelope)
       {
@@ -427,6 +417,10 @@ int32_t main(int32_t argc, char **argv) {
           case stateGoBackHome:
             std::cout << "State: GoBackHome" << std::endl;
             goingHomeState();
+            break;
+          case stateCharging:
+            std::cout << "State: Charging" << std::endl;
+            chargingState(myBattery);
             break;
           default :
             std::cout << "State Unknown" << std::endl;

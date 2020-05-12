@@ -559,7 +559,7 @@ int32_t main(int32_t argc, char **argv) {
         tme290::grass::Control control;
         control.command(myCommand);
         od4.send(control);
-        if(myTimeCounter > 6000){
+        if(myTimeCounter > 12000){
           myTimeCounter = 0;
           if(myRoomSwitch == 1){
             myRoomSwitch = 0;

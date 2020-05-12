@@ -71,7 +71,7 @@ void foo(){
 }
 
 void updateDirectionNext(float grassTopLeft, float grassTopCentre, float grassTopRight, float grassRight, 
-      float GrassBottomRight, float grassBottomCentre, float grassBottomLeft, float grassLeft)
+      float grassBottomRight, float grassBottomCentre, float grassBottomLeft, float grassLeft)
 {
   float maxGrassNear = 0.0f;
   int maxGrassDir = 0;
@@ -121,7 +121,7 @@ void updateDirectionNext(float grassTopLeft, float grassTopCentre, float grassTo
 
 void decideNext(float rain, float battery){
   std::cout << "I Reach Here "<< std::endl;
-  if (myBattery < myBatteryToHome){
+  if (battery < myBatteryToHome){
     // Low battery >> Go home
     std::cout << "Low Battery, Going Home" << std::endl;
     //Remember last point
@@ -133,7 +133,7 @@ void decideNext(float rain, float battery){
       //Going to last pos
       myState = stateGoToLastPoint;
     }else{
-      if(myRain >= 0.2f){
+      if(rain >= 0.2f){
         //Raining So hard >> Stay and do nothing
         std::cout << "Let's Raining. I'll wait..." << std::endl;
 

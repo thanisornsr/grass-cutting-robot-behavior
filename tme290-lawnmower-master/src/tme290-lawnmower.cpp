@@ -289,7 +289,7 @@ void movingState(){
   }
   //Done Moving and update current position
   //Then calculate minimum battery
-  int myDistanceToHome = myPosI*myPosI + myPosJ*myPosJ;
+  int myDistanceToHome = myPosI + myPosJ;
   std::cout << "Position"<< myPosI<<","<<myPosJ<< std::endl;
   myBatteryToHome = (float) myDistanceToHome * myBatteryDrainRate; // This 0.02 are battery drain per one step
   myState = stateDecideNext;

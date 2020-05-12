@@ -462,7 +462,12 @@ int32_t main(int32_t argc, char **argv) {
               break;
             case stateGoToLastPoint:
               std::cout << "State: stateGoToLastPoint" << std::endl;
-              goingToLastPointState();
+              //Original Plan: Go to last poistion
+              //goingToLastPointState();
+              //Test Go to nearest
+              myAtLastPos = 1;
+              updateDirectionNext(myGrassTopLeft,myGrassTopCentre,myGrassTopRight,myGrassRight,myGrassBottomRight, myGrassBottomCentre, myGrassBottomLeft,myGrassLeft);
+              movingState();
               break;
             default :
               std::cout << "State Unknown" << std::endl;

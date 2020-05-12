@@ -131,6 +131,7 @@ void decideNext(float rain, float battery){
   }else{
     if (myAtLastPos == 1){
       //Going to last pos
+      myCommand = 0;
       myState = stateGoToLastPoint;
     }else{
       if(rain >= 0.2f){
@@ -143,6 +144,7 @@ void decideNext(float rain, float battery){
         if (myJustMove == 1){
           //It is time to cut!!
           myJustMove = 0;
+          myCommand = 0;
           myState = stateStayAndCut;
         }else{
           //Let make some move!!
@@ -422,9 +424,11 @@ int32_t main(int32_t argc, char **argv) {
 
         switch(myState){
           case stateDecideNext:
+            std::cout << "State: decideNext" << std::endl;  
             decideNext(myRain, myBattery);
             break;
           case stateMoving:
+            std::cout << "State: Moving" << std::endl;
             updateDirectionNext(myGrassTopLeft,myGrassTopCentre,myGrassTopRight,myGrassRight,myGrassBottomRight, myGrassBottomCentre, myGrassBottomLeft,myGrassLeft);
             movingState();
             break;

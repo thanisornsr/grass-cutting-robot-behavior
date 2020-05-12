@@ -34,7 +34,7 @@ int myJustMove = 0;
 int myGoingHome = 0;
 int myCharging = 0;
 myState = 1;
-std::cout << myState << std::endl;
+std::cout << "HELLO" << std::endl;
 int32_t main(int32_t argc, char **argv) {
   int32_t retCode{0};
   auto commandlineArguments = cluon::getCommandlineArguments(argc, argv);

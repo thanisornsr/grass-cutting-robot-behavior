@@ -428,7 +428,7 @@ int32_t main(int32_t argc, char **argv) {
         std::cout << msg.grassRight() << std::endl;
         tme290::grass::Control control;
         control.command(0);
-        od4.send(control)
+        od4.send(control);
       }};
 
 

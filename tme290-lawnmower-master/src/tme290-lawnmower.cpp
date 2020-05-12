@@ -440,7 +440,7 @@ int32_t main(int32_t argc, char **argv) {
             << msg.grassMean() << "/" << msg.grassMax() << std::endl;
         }
       }};
-    //od4.dataTrigger(tme290::grass::Sensors::ID(), onSensors);
+    od4.dataTrigger(tme290::grass::Sensors::ID(), onSensors);
     od4.dataTrigger(tme290::grass::Status::ID(), onStatus);
 
     if (verbose) {
@@ -451,12 +451,12 @@ int32_t main(int32_t argc, char **argv) {
 
     if (myState == 1){
       //state 1
-      std::cout << "Maybe Here" << std::endl;
-      od4.dataTrigger(tme290::grass::Sensors::ID(), onSensors);
+      
+      od4.dataTrigger(tme290::grass::Sensors::ID(), decideNext);
     }else{
       std::cout << "To be add" << std::endl;
     }
-
+    std::cout << "Maybe Here" << std::endl;
     /*switch(myState){
       case stateDecideNext :
         od4.dataTrigger(tme290::grass::Sensors::ID(), decideNext);

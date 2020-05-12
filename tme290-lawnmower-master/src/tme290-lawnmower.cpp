@@ -426,35 +426,41 @@ int32_t main(int32_t argc, char **argv) {
         myRain = msg.rain();
         myBattery = msg.battery();
 
-        switch(myState){
-          case stateDecideNext:
-            std::cout << "State: decideNext" << std::endl;  
-            decideNext(myRain, myBattery);
-            break;
-          case stateMoving:
-            std::cout << "State: Moving" << std::endl;
-            updateDirectionNext(myGrassTopLeft,myGrassTopCentre,myGrassTopRight,myGrassRight,myGrassBottomRight, myGrassBottomCentre, myGrassBottomLeft,myGrassLeft);
-            movingState();
-            break;
-          case stateStayAndCut:
-            std::cout << "State: Cutting" << std::endl;
-            stayAndCutState(myBattery, myGrassCentre);
-            break;
-          case stateGoBackHome:
-            std::cout << "State: GoBackHome" << std::endl;
-            goingHomeState();
-            break;
-          case stateCharging:
-            std::cout << "State: Charging" << std::endl;
-            chargingState(myBattery);
-            break;
-          case stateGoToLastPoint:
-            std::cout << "State: stateGoToLastPoint" << std::endl;
-            goingToLastPointState();
-            break;
-          default :
-            std::cout << "State Unknown" << std::endl;
+        if (myBattery == 0.0f){
+          std::cout << "I'm Dead!!!!"<< myPosI<<","<<myPosJ<< std::endl;
+        }else{
+          switch(myState){
+            case stateDecideNext:
+              std::cout << "State: decideNext" << std::endl;  
+              decideNext(myRain, myBattery);
+              break;
+            case stateMoving:
+              std::cout << "State: Moving" << std::endl;
+              updateDirectionNext(myGrassTopLeft,myGrassTopCentre,myGrassTopRight,myGrassRight,myGrassBottomRight, myGrassBottomCentre, myGrassBottomLeft,myGrassLeft);
+              movingState();
+              break;
+            case stateStayAndCut:
+              std::cout << "State: Cutting" << std::endl;
+              stayAndCutState(myBattery, myGrassCentre);
+              break;
+            case stateGoBackHome:
+              std::cout << "State: GoBackHome" << std::endl;
+              goingHomeState();
+              break;
+            case stateCharging:
+              std::cout << "State: Charging" << std::endl;
+              chargingState(myBattery);
+              break;
+            case stateGoToLastPoint:
+              std::cout << "State: stateGoToLastPoint" << std::endl;
+              goingToLastPointState();
+              break;
+            default :
+              std::cout << "State Unknown" << std::endl;
+          }
+
         }
+        
         tme290::grass::Control control;
         control.command(myCommand);
         od4.send(control);

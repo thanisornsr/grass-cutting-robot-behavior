@@ -94,13 +94,13 @@ void foo(){
   // Battery drain per step
   myBatteryDrainRate = 0.014f;
   // Cutting Target
-  myTargetCut = 0.4f;
+  myTargetCut = 0.2f;
   // Max step of rainning before go home
   rainMaxStep = 20;
   // Allow passing cutting this step and continue moving
   myAllowPass = 0.7f;
   // If neighbour grass status is above this threshold >> Room 1 go bottom left >> Room 2 go bottom right
-  myDirectionThreshold = 0.5f;
+  myDirectionThreshold = 0.2f;
 }
 
 void updateDirectionNext(float grassTopLeft, float grassTopCentre, float grassTopRight, float grassRight, 
@@ -154,7 +154,7 @@ void updateDirectionNext(float grassTopLeft, float grassTopCentre, float grassTo
       if(myPosJ <15 && myPosI < 37){
         // In room 1 // go bottom left
 
-          maxGrassDir = 4;
+          maxGrassDir = 5;
 
       }else{
         if(myPosJ<20 && myPosI < 37 ){

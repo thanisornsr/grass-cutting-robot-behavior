@@ -35,10 +35,10 @@ int myGoingHome = 0;
 int myCharging = 0;
 myState = 1;
 std::cout << "HELLO" << std::endl;
+std::cout << myState << std::endl;
 int32_t main(int32_t argc, char **argv) {
   int32_t retCode{0};
   auto commandlineArguments = cluon::getCommandlineArguments(argc, argv);
-
   if (0 == commandlineArguments.count("cid")) {
     std::cerr << argv[0] 
       << " is a lawn mower control algorithm." << std::endl;

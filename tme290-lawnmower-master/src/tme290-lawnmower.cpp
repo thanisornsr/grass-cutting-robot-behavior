@@ -309,10 +309,17 @@ void stayAndCutState(float battery, float grassCentre)
     //Low battery Gohome!
     std::cout << "Low Battery, Going Home From cut" << std::endl;
     //Remember last point
-    myLastPosI = myPosI;
-    myLastPosJ = myPosJ;
+    
     myCommand = 0;
     myState = stateGoBackHome;
+    if (myPosJ >= 20){
+      myLastPosJ = 32;
+      myLastPosJ = 20;
+    }else{
+
+      myLastPosI = myPosI;
+      myLastPosJ = myPosJ;
+    }
   }else{
     //Check center grass
     if (grassCentre >= myTargetCut){

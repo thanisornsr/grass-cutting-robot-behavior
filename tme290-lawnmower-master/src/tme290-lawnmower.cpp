@@ -466,15 +466,25 @@ auto goingToLastPointState(){
             myCommand = 6;
             myPosJ = myPosJ+1;
           }else{
-            if(myDiffI > 0){
-              //Move right
-              myCommand = 4;
-              myPosI = myPosI+1;
+            if(myDiffJ < 0){
+              //Move Up
+              myCommand = 2;
+              myPosJ = myPosJ-1;
+
+
             }else{
-              //Move left
-              myCommand = 8;
-              myPosI = myPosI-1;
+              if(myDiffI > 0){
+                //Move right
+                myCommand = 4;
+                myPosI = myPosI+1;
+              }else{
+                //Move left
+                myCommand = 8;
+                myPosI = myPosI-1;
+              }
+
             }
+
           }
         }
       }

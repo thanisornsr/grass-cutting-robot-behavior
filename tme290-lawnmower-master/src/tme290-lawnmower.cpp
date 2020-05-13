@@ -549,7 +549,7 @@ int32_t main(int32_t argc, char **argv) {
     cluon::OD4Session od4{cid};
 
 
-    auto onSensors{[&od4](cluon::data::Envelope &&envelope)
+    auto mainProgram{[&od4](cluon::data::Envelope &&envelope)
       {
         auto msg = cluon::extractMessage<tme290::grass::Sensors>(
             std::move(envelope));
@@ -644,7 +644,7 @@ int32_t main(int32_t argc, char **argv) {
             << msg.grassMean() << "/" << msg.grassMax() << std::endl;
         }
       }};
-    od4.dataTrigger(tme290::grass::Sensors::ID(), onSensors);
+    od4.dataTrigger(tme290::grass::Sensors::ID(), mainProgram);
     od4.dataTrigger(tme290::grass::Status::ID(), onStatus);
 
     if (verbose) {

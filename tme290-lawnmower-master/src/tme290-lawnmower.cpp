@@ -462,9 +462,17 @@ auto goingToLastPointState(){
             myCommand = 4;
             myPosI = myPosI+1;
           }else{
-            //Move down
-            myCommand = 6;
-            myPosJ = myPosJ+1;
+            if(myDiffJ > 0){
+              //Movedown
+              myCommand = 6;
+              myPosJ = myPosJ+1;
+            }else{
+              //Move up
+              myCommand = 2;
+              myPosJ = myPosJ-1;
+            }
+      
+            
           }
         }else{
           //In Room 2

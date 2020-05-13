@@ -430,6 +430,8 @@ auto goingToLastPointState(){
       myCommand = 0;
       std::cout << "Reach Last point" << std::endl;
       myState = stateDecideNext;
+      myPosI = myLastPosI;
+      myPosJ = myLastPosJ;
     }else{
       myAtLastPos = 0;
       std::cout << "Moving to Last Point..." << std::endl;

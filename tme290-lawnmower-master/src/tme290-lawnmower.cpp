@@ -459,7 +459,7 @@ auto goingToLastPointState(){
           }
         }else{
           //In Room 2
-          if(myDiffJ != 0){
+          if(myDiffJ > 0){
             //Move down
             myCommand = 6;
             myPosJ = myPosJ+1;

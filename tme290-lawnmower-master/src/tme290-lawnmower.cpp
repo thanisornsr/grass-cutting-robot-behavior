@@ -345,7 +345,7 @@ void stayAndCutState(float battery, float grassCentre)
 
 void goingHomeState()
 {
-  if (myPosI == 0 and myPosJ == 0){
+  if (myPosI < 1 and myPosJ < 1){
     //Reach Home Move to Charging
     myCommand = 0;
     myState = stateCharging;

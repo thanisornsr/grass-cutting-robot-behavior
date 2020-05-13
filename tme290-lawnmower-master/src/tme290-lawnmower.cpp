@@ -186,10 +186,16 @@ void decideNext(float rain, float battery, float grassCentre){
     // Low battery >> Go home
     std::cout << "Low Battery, Going Home" << std::endl;
     //Remember last point
-    myLastPosI = myPosI;
-    myLastPosJ = myPosJ;
     myCommand = 0;
     myState = stateGoBackHome;
+    if (myPosJ >= 20){
+      myLastPosJ = 32;
+      myLastPosJ = 20;
+    }else{
+
+      myLastPosI = myPosI;
+      myLastPosJ = myPosJ;
+    }
   }else{
     if (myAtLastPos == 0){
       //Going to last pos
@@ -467,9 +473,24 @@ auto goingToLastPointState(){
               myCommand = 6;
               myPosJ = myPosJ+1;
             }else{
-              //Move up
+              if(myDiffJ < 0){
+                //Move up
               myCommand = 2;
               myPosJ = myPosJ-1;
+              }else{
+                //Done with J
+                if(myDiffI > 0){
+                //Move right
+                myCommand = 4;
+                myPosI = myPosI+1;
+              }else{
+                //Move left
+                myCommand = 8;
+                myPosI = myPosI-1;
+              }
+
+              }
+              
             }
       
             

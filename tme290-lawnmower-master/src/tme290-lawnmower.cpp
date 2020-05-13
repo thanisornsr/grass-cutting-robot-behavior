@@ -448,7 +448,7 @@ auto goingToLastPointState(){
         //Target in room2
         if(myPosJ<=21 ){
           //In Room 1
-          if(myPosI<=29){
+          if(myPosI<=30){
             //Move right
             myCommand = 4;
             myPosI = myPosI+1;

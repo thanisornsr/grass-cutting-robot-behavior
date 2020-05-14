@@ -420,8 +420,6 @@ void chargingState(float battery){
             myTryToGoHome = 0;
           }
         }
-
-
       }else{
         // Home properly
         myCommand = 0;
@@ -593,20 +591,13 @@ int32_t main(int32_t argc, char **argv) {
               break;
             case stateGoToLastPoint:
               std::cout << "State: stateGoToLastPoint" << std::endl;
-              //Original Plan: Go to last poistion
-              //goingToLastPointState();
-              //Test Go to nearest
-
               if (myRoomSwitch == 1){
-
                 goingToLastPointState();
               }else{
                 myAtLastPos = 1;
                 updateDirectionNext(myGrassTopLeft,myGrassTopCentre,myGrassTopRight,myGrassRight,myGrassBottomRight, myGrassBottomCentre, myGrassBottomLeft,myGrassLeft);
                 movingState();
               }
-              
-
               break;
             default :
               std::cout << "State Unknown" << std::endl;
@@ -617,6 +608,7 @@ int32_t main(int32_t argc, char **argv) {
         tme290::grass::Control control;
         control.command(myCommand);
         od4.send(control);
+        //This is to switch behavior in go to last point. Keep switching every 6500 step.
         if(myTimeCounter > 6500){
           myTimeCounter = 0;
           if(myRoomSwitch == 1){
@@ -624,7 +616,6 @@ int32_t main(int32_t argc, char **argv) {
           }else{
             myRoomSwitch = 1;
           }
-
         }
         myTimeCounter = myTimeCounter + 1;
         std::cout << "Grass sensor TopCenter and left"<< myGrassTopCentre<<myGrassTopLeft  << std::endl;
